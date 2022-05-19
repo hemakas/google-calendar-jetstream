@@ -10,13 +10,13 @@ import 'vuetify/dist/vuetify.min.css';
 Vue.mixin({ methods: { route } });
 Vue.use(InertiaPlugin);
 Vue.use(PortalVue);
-Vue.use(Veutify);
+Vue.use(Vuetify);
 
 const app = document.getElementById('app');
 
 new Vue({
 
-    uvetify: new Vuetify(),
+    vuetify: new Vuetify(),
     render: (h) =>
         h(InertiaApp, {
             props: {
