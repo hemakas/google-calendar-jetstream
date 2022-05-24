@@ -4,16 +4,8 @@ use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
+// controllers
+use App\Http\Controllers\EventController;
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [
@@ -27,3 +19,25 @@ Route::get('/', function () {
 Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->name('dashboard');
+
+// event routes
+Route::get('/events', [EventController::class, 'index'])->name('events');
+
+Route::get('/calendar', function () {
+    
+    //create a new event
+    $event = new Event;
+
+    $event->name = 'A new event';
+    $event->description = 'Event description';
+    $event->startDateTime = Carbon\Carbon::now();
+    $event->endDateTime = Carbon\Carbon::now()->addHour();
+    $event->addAttendee([
+        'email' => 'hemaka404@gmail.com',
+        'name' => 'Hemaka Ranasinghe',
+        'comment' => 'Lorum ipsum',
+    ]);
+    $event->addAttendee(['email' => 'hemaka91@gmail.com']);
+
+    $event->save();
+});
