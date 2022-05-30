@@ -22,22 +22,26 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
 
 // event routes
 Route::get('/events', [EventController::class, 'index'])->name('events');
+Route::get('/events/create', [EventController::class, 'create'])->name('events.create');
+Route::post('/events/store', [EventController::class, 'store'])->name('events.store');
 
-Route::get('/calendar', function () {
+
+
+// Route::get('/calendar', function () {
     
-    //create a new event
-    $event = new Event;
+//     //create a new event
+//     $event = new Event;
 
-    $event->name = 'A new event';
-    $event->description = 'Event description';
-    $event->startDateTime = Carbon\Carbon::now();
-    $event->endDateTime = Carbon\Carbon::now()->addHour();
-    $event->addAttendee([
-        'email' => 'hemaka404@gmail.com',
-        'name' => 'Hemaka Ranasinghe',
-        'comment' => 'Lorum ipsum',
-    ]);
-    $event->addAttendee(['email' => 'hemaka91@gmail.com']);
+//     $event->name = 'A new event';
+//     $event->description = 'Event description';
+//     $event->startDateTime = Carbon\Carbon::now();
+//     $event->endDateTime = Carbon\Carbon::now()->addHour();
+//     $event->addAttendee([
+//         'email' => 'hemaka404@gmail.com',
+//         'name' => 'Hemaka Ranasinghe',
+//         'comment' => 'Lorum ipsum',
+//     ]);
+//     $event->addAttendee(['email' => 'hemaka91@gmail.com']);
 
-    $event->save();
-});
+//     $event->save();
+// });

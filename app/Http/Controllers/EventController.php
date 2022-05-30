@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Event;
+use App\Models\Assignee;
+use App\Models\EventAssignee;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -25,21 +27,56 @@ class EventController extends Controller
         ]);
     }
 
-    // create event
+    // render event crate page
     public function create()
     {
-        
+        $assignees = Assignee::orderBy('name', 'ASC')->get();
+
+        return Inertia::render('Events/Create', [
+            'assignees' => $assignees
+        ]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
-        //
+        $this->validate($request , [
+            'startDate' => 'required|date',
+            'endDate' => 'required|date|after_or_equal:startDate'
+        ]);
+
+        $start = date('Y-m-d H:i:s', strtotime("$request->startDate $request->startTime"));
+        $end = date('Y-m-d H:i:s', strtotime("$request->endDate $request->endTime"));
+
+        $event = Event::create([
+            'title' => $request->title,
+            'description' => $request->description,
+            'start' => $start,
+            'end' => $end
+        ]);
+
+        $eventId = $event->id;
+
+        if (!empty($request->selectedAssignees)) {
+            
+            $selectedAssignees = $request->selectedAssignees;
+
+            foreach ($selectedAssignees as $selectedAssignee) {
+
+                $selectedAss = explode('-', $request->selectedAssignee);
+                
+                echo $selectedAss;
+                
+                // $assigneeId = $selectedAssignee[1];
+
+                // dd($assigneeId);
+
+                EventAssignee::create([
+                    'assignee_id' => $assigneeId,
+                    'event_id' => $eventId
+                ]);
+            }
+
+        }
     }
 
     /**
