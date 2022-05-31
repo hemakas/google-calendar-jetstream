@@ -27,7 +27,7 @@ class EventController extends Controller
         ]);
     }
 
-    // render event crate page
+    // render event create page
     public function create()
     {
         $assignees = Assignee::orderBy('name', 'ASC')->get();

@@ -4,38 +4,48 @@ namespace App\Http\Controllers;
 
 use App\Models\Assignee;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class AssigneeController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    
+    // contructor
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
+    // show all assignees
     public function index()
     {
-        //
+        $assignees = Assignee::all();
+
+        return Inertia::render('Assignees/Index', [
+            'assignees' => $assignees
+        ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    // render assignee create page
     public function create()
     {
-        //
+        return Inertia::render('Assignees/Create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
+    // save assignee
     public function store(Request $request)
     {
-        //
+        $this->validate($request, [
+            'name' => 'required|string|max:150',
+            'email' => 'required|email:rfc,dns'
+        ]);
+
+        Assignee::create([
+            'name' => $request->name,
+            'email' => $request->email
+        ]);
+
+        return redirect()->route('assignees')->banner('Assignee created successfully.');
+
     }
 
     /**

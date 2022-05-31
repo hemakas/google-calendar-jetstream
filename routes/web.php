@@ -6,6 +6,7 @@ use Inertia\Inertia;
 
 // controllers
 use App\Http\Controllers\EventController;
+use App\Http\Controllers\AssigneeController;
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [
@@ -25,6 +26,10 @@ Route::get('/events', [EventController::class, 'index'])->name('events');
 Route::get('/events/create', [EventController::class, 'create'])->name('events.create');
 Route::post('/events/store', [EventController::class, 'store'])->name('events.store');
 
+// assignees routes
+Route::get('/assignees', [AssigneeController::class, 'index'])->name('assignees');
+Route::get('/assignees/create', [AssigneeController::class, 'create'])->name('assignees.create');
+Route::post('/assignees/store', [AssigneeController::class, 'store'])->name('assignees.store');
 
 
 // Route::get('/calendar', function () {
