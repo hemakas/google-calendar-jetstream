@@ -48,48 +48,43 @@ class AssigneeController extends Controller
 
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Assignee  $assignee
-     * @return \Illuminate\Http\Response
-     */
     public function show(Assignee $assignee)
     {
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Assignee  $assignee
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Assignee $assignee)
+    public function edit($id)
     {
-        //
+        $assignee = Assignee::find($id);
+        
+        return Inertia::render('Assignees/Edit', [
+            'assignee' => $assignee
+        ]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Assignee  $assignee
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Assignee $assignee)
+    public function update(Request $request, $id)
     {
-        //
+        $this->validate($request, [
+            'name' => 'required|string|max:150',
+            'email' => 'required|email:rfc,dns'
+        ]);
+
+        $assignee = Assignee::find($id);
+
+        $assignee->name = $request->name;
+        $assignee->email = $request->email;
+
+        $assignee->update();
+
+        return redirect()->route('assignees')->banner('Assignee updated successfully.');
+
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Assignee  $assignee
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Assignee $assignee)
+    // delete assignee
+    public function destroy($id)
     {
-        //
+        Assignee::destroy($id);
+
+        return redirect()->route('assignees')->banner('Assignee deleted successfully.');
     }
 }

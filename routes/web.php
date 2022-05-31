@@ -25,12 +25,17 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
 Route::get('/events', [EventController::class, 'index'])->name('events');
 Route::get('/events/create', [EventController::class, 'create'])->name('events.create');
 Route::post('/events/store', [EventController::class, 'store'])->name('events.store');
+// Route::get('/events/{event}/edit', [EventController::class, 'edit'])->name('events.edit');
+// Route::put('/events/{booking}', [BookingController::class, 'update'])->name('events.update');
+// Route::delete('/events/{booking}', [BookingController::class, 'destroy'])->name('events.destroy');
 
 // assignees routes
 Route::get('/assignees', [AssigneeController::class, 'index'])->name('assignees');
 Route::get('/assignees/create', [AssigneeController::class, 'create'])->name('assignees.create');
 Route::post('/assignees/store', [AssigneeController::class, 'store'])->name('assignees.store');
-
+Route::get('/assignees/{assignees}/edit', [AssigneeController::class, 'edit'])->name('assignees.edit');
+Route::put('/assignees/{assignee}', [AssigneeController::class, 'update'])->name('assignees.update');
+Route::delete('/assignees/{assignee}', [AssigneeController::class, 'destroy'])->name('assignees.destroy');
 
 // Route::get('/calendar', function () {
     

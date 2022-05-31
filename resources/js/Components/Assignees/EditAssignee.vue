@@ -21,20 +21,29 @@
           <v-btn color="error" class="mr-4" @click="reset">
             Clear
           </v-btn>
-          
         </v-col>
       </v-row>
+
+
+      
+
     </v-form>
   </v-app>
 </template>
 
 <script>
 export default {
+  
+  props: {
+    assignee: {},
+    errors: {}
+  },
+
   data () {
     return {
       form: {
-        name: null,
-        email: null,
+        name: this.assignee.name,
+        email: this.assignee.email,
       },
       
       valid: true,
@@ -51,10 +60,6 @@ export default {
     }
   },
 
-  props: {
-    errors: {}
-  },
-
   methods: {
     validate () {
       this.$refs.form.validate()
@@ -65,7 +70,7 @@ export default {
     },
 
     submit() {
-      this.$inertia.post(`/assignees/store`, this.form)
+      this.$inertia.put(`/assignees/${this.assignee.id}`, this.form)
     },
 
     reset () {
