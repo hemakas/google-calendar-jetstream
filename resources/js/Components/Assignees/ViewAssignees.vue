@@ -26,9 +26,9 @@
               
               <tbody>
                 <!-- table data -->
-                <tr v-for="assignee in assignees" :key="assignee.id" class="bg-white border-b">
+                <tr v-for="(assignee, index) in assignees" :key="assignee.id" class="bg-white border-b">
                   <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                    {{ assignee.id }}
+                    {{ index + 1 }}
                   </td>
                   <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                     {{ assignee.name }}
@@ -40,18 +40,15 @@
                     <div class="flex items-center justify-center">
                       <div class="inline-flex" role="group">
                         
-                        <a :href="`assignees/${assignee.id}/edit`" class="text-green-200 hover:text-blue-600 transition duration-300 ease-in-out mr-4">Edit</a>
+                        <!-- edit button -->
+                        <v-btn text color="blue lighten-2" :href="`assignees/${assignee.id}/edit`" dark>Edit</v-btn>
                         
-                        <!-- <form @submit.prevent="deleteAssignee(assignee.id)">
-                          <button type="submit" class="text-red-400 hover:text-red-600 transition duration-300 ease-in-out" data-bs-toggle="modal" data-bs-target="#exampleModal">Delete</button>
-                        </form> -->
+                        <!-- delete button -->
+                        <delete-modal :deleteId="assignee.id" @delete-confirmation="deleteConfirmation"/>
 
                       </div>
                     </div>
                   </td>
-
-                  <delete-modal />
-
                 </tr>
               </tbody>
 
@@ -80,25 +77,20 @@
         deleteId: null,
       }
     },
-      
-      components: {
-          // Pagination
-        },
 
-      props: {
-        assignees: {},
-      },
-      
-      methods: {
-        deleteAssignee(id) {
-          this.deleteId = id
-        },
-        
-        submit() {
-          this.$inertia.delete(`/assignees/${this.deleteId}`)
-          location.reload()
-        },
-      },
+    props: {
+      assignees: {},
+    },
+    
+    methods: {
+
+      deleteConfirmation (id) {
+        this.$inertia.delete(`/assignees/${id}`)
+        location.reload()
+      }
+
+
+    },
 
   }
 </script>

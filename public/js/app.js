@@ -2195,12 +2195,21 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "DeleteModal",
+  props: ["deleteId"],
   data: function data() {
     return {
       dialog: false
     };
+  },
+  methods: {
+    onClickYes: function onClickYes() {
+      this.dialog = false;
+      this.$emit('delete-confirmation', this.deleteId);
+    }
   }
 });
 
@@ -2371,9 +2380,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   beforeCreate: function beforeCreate() {
     this.$options.components.DeleteModal = (__webpack_require__(/*! ./DeleteModal.vue */ "./resources/js/Components/Assignees/DeleteModal.vue")["default"]);
@@ -2383,17 +2389,12 @@ __webpack_require__.r(__webpack_exports__);
       deleteId: null
     };
   },
-  components: {// Pagination
-  },
   props: {
     assignees: {}
   },
   methods: {
-    deleteAssignee: function deleteAssignee(id) {
-      this.deleteId = id;
-    },
-    submit: function submit() {
-      this.$inertia["delete"]("/assignees/".concat(this.deleteId));
+    deleteConfirmation: function deleteConfirmation(id) {
+      this.$inertia["delete"]("/assignees/".concat(id));
       location.reload();
     }
   }
@@ -33392,7 +33393,7 @@ var render = function () {
                 "v-btn",
                 _vm._g(
                   _vm._b(
-                    { attrs: { color: "red lighten-2", dark: "" } },
+                    { attrs: { text: "", color: "red lighten-2", dark: "" } },
                     "v-btn",
                     attrs,
                     false
@@ -33418,11 +33419,13 @@ var render = function () {
       _c(
         "v-card",
         [
-          _c("v-card-title", { staticClass: "text-h5 grey lighten-2" }, [
+          _c("v-card-title", { staticClass: "text-h5 red lighten-2" }, [
             _vm._v("Delete Confirmation"),
           ]),
           _vm._v(" "),
-          _c("v-card-text", [
+          _c("v-spacer"),
+          _vm._v(" "),
+          _c("v-card-text", { staticClass: "mt-4" }, [
             _vm._v("Are you sure you want to delete this record?"),
           ]),
           _vm._v(" "),
@@ -33436,12 +33439,8 @@ var render = function () {
               _c(
                 "v-btn",
                 {
-                  attrs: { color: "primary", text: "" },
-                  on: {
-                    click: function ($event) {
-                      _vm.dialog = false
-                    },
-                  },
+                  attrs: { color: "red", text: "" },
+                  on: { click: _vm.onClickYes },
                 },
                 [_vm._v("Yes")]
               ),
@@ -33449,7 +33448,7 @@ var render = function () {
               _c(
                 "v-btn",
                 {
-                  attrs: { color: "primary", text: "" },
+                  attrs: { color: "secondary", text: "" },
                   on: {
                     click: function ($event) {
                       _vm.dialog = false
@@ -33687,7 +33686,7 @@ var render = function () {
                 _vm._v(" "),
                 _c(
                   "tbody",
-                  _vm._l(_vm.assignees, function (assignee) {
+                  _vm._l(_vm.assignees, function (assignee, index) {
                     return _c(
                       "tr",
                       { key: assignee.id, staticClass: "bg-white border-b" },
@@ -33701,7 +33700,7 @@ var render = function () {
                           [
                             _vm._v(
                               "\n                  " +
-                                _vm._s(assignee.id) +
+                                _vm._s(index + 1) +
                                 "\n                "
                             ),
                           ]
@@ -33758,29 +33757,36 @@ var render = function () {
                                   },
                                   [
                                     _c(
-                                      "a",
+                                      "v-btn",
                                       {
-                                        staticClass:
-                                          "text-green-200 hover:text-blue-600 transition duration-300 ease-in-out mr-4",
                                         attrs: {
+                                          text: "",
+                                          color: "blue lighten-2",
                                           href:
                                             "assignees/" +
                                             assignee.id +
                                             "/edit",
+                                          dark: "",
                                         },
                                       },
                                       [_vm._v("Edit")]
                                     ),
-                                  ]
+                                    _vm._v(" "),
+                                    _c("delete-modal", {
+                                      attrs: { deleteId: assignee.id },
+                                      on: {
+                                        "delete-confirmation":
+                                          _vm.deleteConfirmation,
+                                      },
+                                    }),
+                                  ],
+                                  1
                                 ),
                               ]
                             ),
                           ]
                         ),
-                        _vm._v(" "),
-                        _c("delete-modal"),
-                      ],
-                      1
+                      ]
                     )
                   }),
                   0

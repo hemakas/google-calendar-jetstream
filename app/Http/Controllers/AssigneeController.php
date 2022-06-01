@@ -18,7 +18,7 @@ class AssigneeController extends Controller
     // show all assignees
     public function index()
     {
-        $assignees = Assignee::all();
+        $assignees = Assignee::orderBy('name', 'ASC')->get();
 
         return Inertia::render('Assignees/Index', [
             'assignees' => $assignees
@@ -40,7 +40,7 @@ class AssigneeController extends Controller
         ]);
 
         Assignee::create([
-            'name' => $request->name,
+            'name' => ucwords($request->name),
             'email' => $request->email
         ]);
 
