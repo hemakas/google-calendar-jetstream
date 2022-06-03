@@ -20,7 +20,7 @@ class EventController extends Controller
     // show all events
     public function index()
     {
-        $events = Event::all();
+        $events = Event::OrderBy('created_at', 'DESC')->get();
 
         return Inertia::render('Events/Index', [
             'events' => $events
@@ -37,6 +37,7 @@ class EventController extends Controller
         ]);
     }
 
+    // save new event
     public function store(Request $request)
     {
         $this->validate($request , [
@@ -55,72 +56,51 @@ class EventController extends Controller
         ]);
 
         $eventId = $event->id;
+        $selectedAssignees = $request->selectedAssignees;
 
-        if (!empty($request->selectedAssignees)) {
-            
-            $selectedAssignees = $request->selectedAssignees;
+        if (!empty($selectedAssignees)) {     
 
             foreach ($selectedAssignees as $selectedAssignee) {
-
-                $selectedAss = explode('-', $request->selectedAssignee);
-                
-                echo $selectedAss;
-                
-                // $assigneeId = $selectedAssignee[1];
-
-                // dd($assigneeId);
+                $assigneeInfo = explode('-', $selectedAssignee);
+                $assigneeId = $assigneeInfo[2];
 
                 EventAssignee::create([
                     'assignee_id' => $assigneeId,
                     'event_id' => $eventId
                 ]);
             }
-
         }
-    }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Event  $event
-     * @return \Illuminate\Http\Response
-     */
+        return redirect()->route('events')->banner('Event created successfully.');
+    }
+    
     public function show(Event $event)
     {
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Event  $event
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Event $event)
+    // render edit page
+    public function edit(Event $id)
     {
-        //
+        $event = Event::find($id);
+        $assignees = Assignee::orderBy('name', 'ASC')->get();
+                
+        return Inertia::render('Events/Edit', [
+            'event' => $event,
+            'assignees' => $assignees
+        ]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Event  $event
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, Event $event)
     {
         //
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Event  $event
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Event $event)
+    // delete event
+    public function destroy(Event $id)
     {
-        //
+        Event::destroy($id);
+
+        return redirect()->route('events')->banner('Event deleted successfully.');
     }
 }

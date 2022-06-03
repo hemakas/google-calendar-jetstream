@@ -69,7 +69,7 @@
       </v-row>
       
       <v-row>
-        <v-col cols="12" md="12" class="mb-4">
+        <v-col cols="12" md="6" class="mb-4">
           <!-- assignee -->
           <v-select v-model="form.selectedAssignees" :items="items" :menu-props="{ maxHeight: '400' }" label="Assignee" multiple hint="Select whom to assign" persistent-hint></v-select>
         </v-col>
@@ -91,15 +91,21 @@
 
 <script>
 export default {
+  props: {
+    event: {},
+    assignees: {},
+    errors: {}
+  },
+  
   data () {
     return {
       form: {
-        title: null,
-        description: null,
-        startDate: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
-        startTime: null,
-        endDate: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
-        endTime: null,
+        title: this.event.title,
+        description: this.event.description,
+        startDate: this.event.start.split(" ")[0],
+        startTime: this.event.start.split(" ")[1],
+        endDate: this.event.end.split(" ")[0],
+        endTime: this.event.end.split(" ")[1],
         selectedAssignees: [],
       },
       
@@ -120,17 +126,17 @@ export default {
     }
   },
 
-  props: {
-    assignees: {}
-  },
-
   methods: {
     validate () {
       this.$refs.form.validate()
 
       if (this.valid) {
-        this.$inertia.post(`/events/store`, this.form)
+        this.submit()
       }
+    },
+
+    submit() {
+      this.$inertia.post(`/events/store`, this.form)
     },
 
     reset () {

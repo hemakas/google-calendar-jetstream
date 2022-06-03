@@ -25,9 +25,9 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
 Route::get('/events', [EventController::class, 'index'])->name('events');
 Route::get('/events/create', [EventController::class, 'create'])->name('events.create');
 Route::post('/events/store', [EventController::class, 'store'])->name('events.store');
-// Route::get('/events/{event}/edit', [EventController::class, 'edit'])->name('events.edit');
+Route::get('/events/{event}/edit', [EventController::class, 'edit'])->name('events.edit');
 // Route::put('/events/{booking}', [BookingController::class, 'update'])->name('events.update');
-// Route::delete('/events/{booking}', [BookingController::class, 'destroy'])->name('events.destroy');
+Route::delete('/events/{event}', [EventController::class, 'destroy'])->name('events.destroy');
 
 // assignees routes
 Route::get('/assignees', [AssigneeController::class, 'index'])->name('assignees');

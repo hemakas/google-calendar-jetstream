@@ -69,7 +69,7 @@
 
   export default {
     beforeCreate: function () {
-      this.$options.components.DeleteModal = require('./DeleteModal.vue').default
+      this.$options.components.DeleteModal = require('../Elements/DeleteModal.vue').default
     },
     
     data() {
@@ -83,13 +83,10 @@
     },
     
     methods: {
-
       deleteConfirmation (id) {
         this.$inertia.delete(`/assignees/${id}`)
         location.reload()
       }
-
-
     },
 
   }

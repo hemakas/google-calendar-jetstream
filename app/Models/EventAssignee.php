@@ -8,4 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class EventAssignee extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'assignee_id',
+        'event_id'
+    ];
 }
