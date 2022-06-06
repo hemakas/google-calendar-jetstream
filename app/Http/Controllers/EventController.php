@@ -89,7 +89,7 @@ class EventController extends Controller
         foreach ($event->assigneeList as $assignee) {
             $selectedAssignees[] = $assignee;
         }
-        
+
         return Inertia::render('Events/Edit', [
             'event' => $event,
             'allAssignees' => $allAssignees,
@@ -140,8 +140,12 @@ class EventController extends Controller
     }
 
     // delete event
-    public function destroy(Event $id)
+    public function destroy($id)
     {
+        
+        // delete all assignees from the event
+        $eventAssignees = EventAssignee::where('event_id', $id)->delete();
+        
         Event::destroy($id);
 
         return redirect()->route('events')->banner('Event deleted successfully.');
