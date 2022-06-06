@@ -13,4 +13,11 @@ class Assignee extends Model
         'name',
         'email'
     ];
+
+    // protected $with = ["eventsList"];
+
+    public function eventsList()
+    {
+        return $this->belongsToMany(Event::class, 'event_assignees');
+    }
 }

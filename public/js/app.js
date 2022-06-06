@@ -2664,10 +2664,20 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: {
     event: {},
-    assignees: {},
+    allAssignees: {},
+    selectedAssignees: {},
     errors: {}
   },
   data: function data() {
@@ -2679,7 +2689,7 @@ __webpack_require__.r(__webpack_exports__);
         startTime: this.event.start.split(" ")[1],
         endDate: this.event.end.split(" ")[0],
         endTime: this.event.end.split(" ")[1],
-        selectedAssignees: []
+        newSelectedAssignees: this.selectedItems
       },
       startDateMenu: false,
       startTimeModal: false,
@@ -2687,6 +2697,7 @@ __webpack_require__.r(__webpack_exports__);
       endTimeModal: false,
       valid: true,
       items: [],
+      selectedItems: [],
       titleRules: [function (v) {
         return !!v || 'Title is required';
       }],
@@ -2698,11 +2709,12 @@ __webpack_require__.r(__webpack_exports__);
       this.$refs.form.validate();
 
       if (this.valid) {
+        this.form.newSelectedAssignees = this.selectedItems;
         this.submit();
       }
     },
     submit: function submit() {
-      this.$inertia.post("/events/store", this.form);
+      this.$inertia.put("/events/".concat(this.event.id), this.form);
     },
     reset: function reset() {
       this.$refs.form.reset();
@@ -2713,15 +2725,25 @@ __webpack_require__.r(__webpack_exports__);
     populateAssignee: function populateAssignee() {
       var items = [];
 
-      for (var i = 0; i < Object.keys(this.assignees).length; i++) {
-        items.push(this.assignees[i].name + ' - ' + this.assignees[i].email + ' - ' + this.assignees[i].id);
+      for (var i = 0; i < Object.keys(this.allAssignees).length; i++) {
+        items.push(this.allAssignees[i].name + ' - ' + this.allAssignees[i].email + ' - ' + this.allAssignees[i].id);
       }
 
       this.items = items;
+    },
+    populateSeletedAssignees: function populateSeletedAssignees() {
+      var items = [];
+
+      for (var i = 0; i < Object.keys(this.selectedAssignees).length; i++) {
+        items.push(this.selectedAssignees[i].name + ' - ' + this.selectedAssignees[i].email + ' - ' + this.selectedAssignees[i].id);
+      }
+
+      this.selectedItems = items;
     }
   },
   mounted: function mounted() {
     this.populateAssignee();
+    this.populateSeletedAssignees();
   }
 });
 
@@ -5502,6 +5524,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
@@ -5511,7 +5534,8 @@ __webpack_require__.r(__webpack_exports__);
   },
   props: {
     event: {},
-    assignees: {},
+    allAssignees: {},
+    selectedAssignees: {},
     errors: {}
   }
 });
@@ -35168,7 +35192,7 @@ var render = function () {
             [
               _c(
                 "v-col",
-                { staticClass: "mb-4", attrs: { cols: "12", md: "6" } },
+                { staticClass: "mb-4", attrs: { cols: "12", md: "12" } },
                 [
                   _c("v-select", {
                     attrs: {
@@ -35179,12 +35203,42 @@ var render = function () {
                       hint: "Select whom to assign",
                       "persistent-hint": "",
                     },
-                    model: {
-                      value: _vm.form.selectedAssignees,
-                      callback: function ($$v) {
-                        _vm.$set(_vm.form, "selectedAssignees", $$v)
+                    scopedSlots: _vm._u([
+                      {
+                        key: "selection",
+                        fn: function (ref) {
+                          var item = ref.item
+                          var index = ref.index
+                          return [
+                            index === 0
+                              ? _c("v-chip", [
+                                  _c("span", [_vm._v(_vm._s(item))]),
+                                ])
+                              : _vm._e(),
+                            _vm._v(" "),
+                            index === 1
+                              ? _c(
+                                  "span",
+                                  { staticClass: "grey--text text-caption" },
+                                  [
+                                    _vm._v(
+                                      "\n              (+" +
+                                        _vm._s(_vm.selectedItems.length - 1) +
+                                        " others)\n            "
+                                    ),
+                                  ]
+                                )
+                              : _vm._e(),
+                          ]
+                        },
                       },
-                      expression: "form.selectedAssignees",
+                    ]),
+                    model: {
+                      value: _vm.selectedItems,
+                      callback: function ($$v) {
+                        _vm.selectedItems = $$v
+                      },
+                      expression: "selectedItems",
                     },
                   }),
                 ],
@@ -37574,7 +37628,7 @@ var render = function () {
                           {
                             attrs: {
                               href: _vm.route("events"),
-                              active: _vm.route().current("events"),
+                              active: _vm.route().current("events*"),
                             },
                           },
                           [
@@ -37599,7 +37653,7 @@ var render = function () {
                           {
                             attrs: {
                               href: _vm.route("assignees"),
-                              active: _vm.route().current("assignees"),
+                              active: _vm.route().current("assignees*"),
                             },
                           },
                           [
@@ -40522,7 +40576,8 @@ var render = function () {
               _c("edit-event", {
                 attrs: {
                   event: _vm.event,
-                  assignees: _vm.assignees,
+                  allAssignees: _vm.allAssignees,
+                  selectedAssignees: _vm.selectedAssignees,
                   errors: _vm.errors,
                 },
               }),

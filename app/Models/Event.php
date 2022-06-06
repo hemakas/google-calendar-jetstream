@@ -15,6 +15,12 @@ class Event extends Model
         'start',
         'end'
     ];
-
+    
+    // protected $with = ["assigneeList"];
+    
+    public function assigneeList()
+    {
+        return $this->belongsToMany(Assignee::class, 'event_assignees');
+    }
 
 }

@@ -69,9 +69,18 @@
       </v-row>
       
       <v-row>
-        <v-col cols="12" md="6" class="mb-4">
+        <v-col cols="12" md="12" class="mb-4">
           <!-- assignee -->
-          <v-select v-model="form.selectedAssignees" :items="items" :menu-props="{ maxHeight: '400' }" label="Assignee" multiple hint="Select whom to assign" persistent-hint></v-select>
+          <v-select v-model="selectedItems" :items="items" :menu-props="{ maxHeight: '400' }" label="Assignee" multiple hint="Select whom to assign" persistent-hint>
+            <template v-slot:selection="{ item, index }">
+              <v-chip v-if="index === 0">
+                <span>{{ item }}</span>
+              </v-chip>
+              <span v-if="index === 1" class="grey--text text-caption">
+                (+{{ selectedItems.length - 1 }} others)
+              </span>
+            </template>
+          </v-select>
         </v-col>
       </v-row>
 
@@ -93,7 +102,8 @@
 export default {
   props: {
     event: {},
-    assignees: {},
+    allAssignees: {},
+    selectedAssignees: {},
     errors: {}
   },
   
@@ -106,7 +116,7 @@ export default {
         startTime: this.event.start.split(" ")[1],
         endDate: this.event.end.split(" ")[0],
         endTime: this.event.end.split(" ")[1],
-        selectedAssignees: [],
+        newSelectedAssignees: this.selectedItems,
       },
       
       startDateMenu: false,
@@ -115,6 +125,7 @@ export default {
       endTimeModal: false,
       valid: true,
       items: [],
+      selectedItems: [],
 
       titleRules: [
         v => !!v || 'Title is required'
@@ -131,12 +142,14 @@ export default {
       this.$refs.form.validate()
 
       if (this.valid) {
-        this.submit()
+
+        this.form.newSelectedAssignees = this.selectedItems
+        this.submit()       
       }
     },
 
-    submit() {
-      this.$inertia.post(`/events/store`, this.form)
+    submit () {
+      this.$inertia.put(`/events/${this.event.id}`, this.form)
     },
 
     reset () {
@@ -149,16 +162,27 @@ export default {
 
     populateAssignee () {
       const items = []
-      for (let i = 0; i < Object.keys(this.assignees).length; i++) {
-        items.push(this.assignees[i].name + ' - ' + this.assignees[i].email + ' - ' + this.assignees[i].id)
+      for (let i = 0; i < Object.keys(this.allAssignees).length; i++) {
+        items.push(this.allAssignees[i].name + ' - ' + this.allAssignees[i].email + ' - ' + this.allAssignees[i].id)
       }
 
       this.items = items
     },
+
+    populateSeletedAssignees () {
+      const items = []
+    
+      for (let i = 0; i < Object.keys(this.selectedAssignees).length; i++) {
+        items.push(this.selectedAssignees[i].name + ' - ' + this.selectedAssignees[i].email + ' - ' + this.selectedAssignees[i].id)
+      }
+
+      this.selectedItems = items
+    }
   },
 
   mounted () {
     this.populateAssignee ()
+    this.populateSeletedAssignees ()
   },
 }
 </script>

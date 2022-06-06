@@ -11,7 +11,8 @@
                 <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
                     <edit-event 
                     :event="event" 
-                    :assignees="assignees" 
+                    :allAssignees="allAssignees" 
+                    :selectedAssignees="selectedAssignees"
                     :errors="errors" 
                     />
                 </div>
@@ -32,7 +33,8 @@
 
         props: {
             event: {},
-            assignees: {},
+            allAssignees: {},
+            selectedAssignees: {},
             errors: {}
         }
     }
