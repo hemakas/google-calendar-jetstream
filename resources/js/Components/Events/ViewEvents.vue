@@ -48,10 +48,10 @@
                     {{ event.description }}
                   </td>
                   <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                    {{ event.start }}
+                    <span class="text-blue-600">{{ formatDateTime(event.start) }}</span>
                   </td>
                   <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                    {{ event.end }}
+                    <span class="text-red-600">{{ formatDateTime(event.end) }}</span>
                   </td>
                   <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                     assigned to
@@ -110,8 +110,28 @@ export default {
       deleteConfirmation (id) {
         this.$inertia.delete(`/events/${id}`)
         location.reload()
-      }
+      },
+
+      formatDateTime (date) {
+        date = new Date(date)
+        
+        let year = date.getFullYear()
+        let month = (1 + date.getMonth()).toString().padStart(2, '0')
+        let day = date.getDate().toString().padStart(2, '0')
+
+        let hour = date.getHours()
+        let hours = ((hour + 11) % 12 + 1)
+
+        let minutes = date.getMinutes()
+        minutes = minutes == 0 ? "00" : minutes
+        
+        let suffix = hour >= 12 ? "PM" : "AM";
+
+        return month + '/' + day + '/' + year + ' | ' + hours + ':' + minutes + ' ' + suffix;
+      },
     },
+
+    
 
 }
 </script>

@@ -2866,6 +2866,18 @@ __webpack_require__.r(__webpack_exports__);
     deleteConfirmation: function deleteConfirmation(id) {
       this.$inertia["delete"]("/events/".concat(id));
       location.reload();
+    },
+    formatDateTime: function formatDateTime(date) {
+      date = new Date(date);
+      var year = date.getFullYear();
+      var month = (1 + date.getMonth()).toString().padStart(2, '0');
+      var day = date.getDate().toString().padStart(2, '0');
+      var hour = date.getHours();
+      var hours = (hour + 11) % 12 + 1;
+      var minutes = date.getMinutes();
+      minutes = minutes == 0 ? "00" : minutes;
+      var suffix = hour >= 12 ? "PM" : "AM";
+      return month + '/' + day + '/' + year + ' | ' + hours + ':' + minutes + ' ' + suffix;
     }
   }
 });
@@ -35465,11 +35477,9 @@ var render = function () {
                               "px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900",
                           },
                           [
-                            _vm._v(
-                              "\n                  " +
-                                _vm._s(event.start) +
-                                "\n                "
-                            ),
+                            _c("span", { staticClass: "text-blue-600" }, [
+                              _vm._v(_vm._s(_vm.formatDateTime(event.start))),
+                            ]),
                           ]
                         ),
                         _vm._v(" "),
@@ -35480,11 +35490,9 @@ var render = function () {
                               "px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900",
                           },
                           [
-                            _vm._v(
-                              "\n                  " +
-                                _vm._s(event.end) +
-                                "\n                "
-                            ),
+                            _c("span", { staticClass: "text-red-600" }, [
+                              _vm._v(_vm._s(_vm.formatDateTime(event.end))),
+                            ]),
                           ]
                         ),
                         _vm._v(" "),
