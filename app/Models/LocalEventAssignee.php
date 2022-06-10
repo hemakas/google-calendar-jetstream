@@ -5,12 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class EventAssignee extends Model
+class LocalEventAssignee extends Model
 {
     use HasFactory;
 
     protected $fillable = [
         'assignee_id',
-        'event_id'
+        'local_event_id'
     ];
 }

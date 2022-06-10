@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\EventAssignee;
+use App\Models\LocalEventAssignee;
 use Illuminate\Http\Request;
 
-class EventAssigneeController extends Controller
+class LocalEventAssigneeController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -41,10 +41,10 @@ class EventAssigneeController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\EventAssignee  $eventAssignee
+     * @param  \App\Models\LocalEventAssignee  $localEventAssignee
      * @return \Illuminate\Http\Response
      */
-    public function show(EventAssignee $eventAssignee)
+    public function show(LocalEventAssignee $localEventAssignee)
     {
         //
     }
@@ -52,10 +52,10 @@ class EventAssigneeController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\EventAssignee  $eventAssignee
+     * @param  \App\Models\LocalEventAssignee  $localEventAssignee
      * @return \Illuminate\Http\Response
      */
-    public function edit(EventAssignee $eventAssignee)
+    public function edit(LocalEventAssignee $localEventAssignee)
     {
         //
     }
@@ -64,10 +64,10 @@ class EventAssigneeController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\EventAssignee  $eventAssignee
+     * @param  \App\Models\LocalEventAssignee  $localEventAssignee
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, EventAssignee $eventAssignee)
+    public function update(Request $request, LocalEventAssignee $localEventAssignee)
     {
         //
     }
@@ -75,10 +75,10 @@ class EventAssigneeController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\EventAssignee  $eventAssignee
+     * @param  \App\Models\LocalEventAssignee  $localEventAssignee
      * @return \Illuminate\Http\Response
      */
-    public function destroy(EventAssignee $eventAssignee)
+    public function destroy(LocalEventAssignee $localEventAssignee)
     {
         //
     }

@@ -2,13 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Event;
+use App\Models\LocalEvent;
 use App\Models\Assignee;
-use App\Models\EventAssignee;
+use App\Models\LocalEventAssignee;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
-class EventController extends Controller
+// google calendar plugin
+use Spatie\GoogleCalendar\Event;
+
+class LocalEventController extends Controller
 {
 
     // contructor
@@ -20,14 +23,14 @@ class EventController extends Controller
     // show all events
     public function index()
     {
-        $events = Event::OrderBy('created_at', 'DESC')->get();
+        $localEvents = LocalEvent::OrderBy('created_at', 'DESC')->get();
 
         return Inertia::render('Events/Index', [
-            'events' => $events
+            'events' => $localEvents
         ]);
     }
 
-    // render event create page
+    // render local event create page
     public function create()
     {
         $assignees = Assignee::orderBy('name', 'ASC')->get();
@@ -37,7 +40,7 @@ class EventController extends Controller
         ]);
     }
 
-    // save new event
+    // save new local event
     public function store(Request $request)
     {
         $this->validate($request , [
@@ -48,14 +51,14 @@ class EventController extends Controller
         $start = date('Y-m-d H:i:s', strtotime("$request->startDate $request->startTime"));
         $end = date('Y-m-d H:i:s', strtotime("$request->endDate $request->endTime"));
 
-        $event = Event::create([
+        $localEvent = LocalEvent::create([
             'title' => $request->title,
-            'description' => $request->description,
+            'description' => $request->descriLocalEventAssigneeption,
             'start' => $start,
             'end' => $end
         ]);
 
-        $eventId = $event->id;
+        $localEventId = $localEvent->id;
         $selectedAssignees = $request->selectedAssignees;
 
         if (!empty($selectedAssignees)) {     
@@ -64,17 +67,25 @@ class EventController extends Controller
                 $assigneeInfo = explode('-', $selectedAssignee);
                 $assigneeId = $assigneeInfo[2];
 
-                EventAssignee::create([
+                LocalEventAssignee::create([
                     'assignee_id' => $assigneeId,
-                    'event_id' => $eventId
+                    'local_event_id' => $localEventId
                 ]);
             }
         }
 
+        // save event on google calendar
+        // $event = Event::create([
+        //     'name' => $request->title,
+        //     'description' => $request->description,
+        //     'startDateTime' => $start,
+        //     'endDateTime' => $end
+        // ]);
+
         return redirect()->route('events')->banner('Event created successfully.');
     }
     
-    public function show(Event $event)
+    public function show(LocalEvent $localEvent)
     {
         //
     }
@@ -82,16 +93,16 @@ class EventController extends Controller
     // render edit page
     public function edit($id)
     {
-        $event = Event::find($id);  
+        $localEvent = LocalEvent::find($id);  
         $allAssignees = Assignee::orderBy('name', 'ASC')->get();
         $selectedAssignees = [];
 
-        foreach ($event->assigneeList as $assignee) {
+        foreach ($localEvent->assigneeList as $assignee) {
             $selectedAssignees[] = $assignee;
         }
 
         return Inertia::render('Events/Edit', [
-            'event' => $event,
+            'event' => $localEvent,
             'allAssignees' => $allAssignees,
             'selectedAssignees' => $selectedAssignees
         ]);
@@ -108,19 +119,19 @@ class EventController extends Controller
         $start = date('Y-m-d H:i:s', strtotime("$request->startDate $request->startTime"));
         $end = date('Y-m-d H:i:s', strtotime("$request->endDate $request->endTime"));
 
-        $event = Event::find($id);
+        $localEvent = LocalEvent::find($id);
         
-        $event->title = $request->title;
-        $event->description = $request->description;
-        $event->start = $start;
-        $event->end = $end;
+        $localEvent->title = $request->title;
+        $localEvent->description = $request->description;
+        $localEvent->start = $start;
+        $localEvent->end = $end;
 
-        $event->update();
+        $localEvent->update();
 
         $newSelectedAssignees = $request->newSelectedAssignees;
 
         // delete all assignees from the event
-        $eventAssignees = EventAssignee::where('event_id', $id)->delete();
+        $LocalEventAssignees = LocalEventAssignee::where('local_event_id', $id)->delete();
 
         // add new assignees to the event
         if (!empty($newSelectedAssignees)) {     
@@ -129,9 +140,9 @@ class EventController extends Controller
                 $assigneeInfo = explode('-', $newSelectedAssignee);
                 $assigneeId = $assigneeInfo[2];
 
-                EventAssignee::create([
+                LocalEventAssignee::create([
                     'assignee_id' => $assigneeId,
-                    'event_id' => $id
+                    'local_event_id' => $id
                 ]);
             }
         }
@@ -144,9 +155,9 @@ class EventController extends Controller
     {
         
         // delete all assignees from the event
-        $eventAssignees = EventAssignee::where('event_id', $id)->delete();
+        $LocalEventAssignee = LocalEventAssignee::where('local_event_id', $id)->delete();
         
-        Event::destroy($id);
+        LocalEvent::destroy($id);
 
         return redirect()->route('events')->banner('Event deleted successfully.');
     }

@@ -84,8 +84,15 @@ class AssigneeController extends Controller
     // delete assignee
     public function destroy($id)
     {
-        Assignee::destroy($id);
+        try {
+            Assignee::destroy($id);
+            return redirect()->route('assignees')->banner('Assignee deleted successfully.', 'danger');
+        } catch (\Exception $exception) {     
+            
+            session()->flash('flash.banner', 'Assignee Cannot be deleted as he/she already signed with an event!');
+            session()->flash('flash.bannerStyle', 'danger');
 
-        return redirect()->route('assignees')->banner('Assignee deleted successfully.');
+        } 
+
     }
 }

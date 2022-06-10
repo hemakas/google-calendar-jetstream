@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Event extends Model
+class LocalEvent extends Model
 {
     use HasFactory;
 
@@ -16,11 +16,11 @@ class Event extends Model
         'end'
     ];
     
-    // protected $with = ["assigneeList"];
+    protected $with = ["assigneeList"];
     
     public function assigneeList()
     {
-        return $this->belongsToMany(Assignee::class, 'event_assignees');
+        return $this->belongsToMany(Assignee::class, 'local_event_assignees');
     }
 
 }

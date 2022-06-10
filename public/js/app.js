@@ -2710,11 +2710,8 @@ __webpack_require__.r(__webpack_exports__);
 
       if (this.valid) {
         this.form.newSelectedAssignees = this.selectedItems;
-        this.submit();
+        this.$inertia.put("/events/".concat(this.event.id), this.form);
       }
-    },
-    submit: function submit() {
-      this.$inertia.put("/events/".concat(this.event.id), this.form);
     },
     reset: function reset() {
       this.$refs.form.reset();
@@ -34203,7 +34200,7 @@ var render = function () {
           on: {
             submit: function ($event) {
               $event.preventDefault()
-              return _vm.submit.apply(null, arguments)
+              return _vm.validate.apply(null, arguments)
             },
           },
           model: {
@@ -34747,7 +34744,7 @@ var render = function () {
           on: {
             submit: function ($event) {
               $event.preventDefault()
-              return _vm.submit.apply(null, arguments)
+              return _vm.validate.apply(null, arguments)
             },
           },
           model: {

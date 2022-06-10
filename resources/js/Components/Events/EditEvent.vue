@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <v-form ref="form" @submit.prevent="submit" v-model="valid" lazy-validation class="pa-md-4 mx-lg-auto">
+    <v-form ref="form" @submit.prevent="validate" v-model="valid" lazy-validation class="pa-md-4 mx-lg-auto">
 
       <!-- title -->
       <v-text-field v-model="form.title" :rules="titleRules" label="Title" required></v-text-field>
@@ -142,14 +142,9 @@ export default {
       this.$refs.form.validate()
 
       if (this.valid) {
-
         this.form.newSelectedAssignees = this.selectedItems
-        this.submit()       
+        this.$inertia.put(`/events/${this.event.id}`, this.form)     
       }
-    },
-
-    submit () {
-      this.$inertia.put(`/events/${this.event.id}`, this.form)
     },
 
     reset () {
