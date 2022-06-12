@@ -23,13 +23,10 @@
           </v-btn>
         </v-col>
       </v-row>
-
-
-      
-
     </v-form>
   </v-app>
 </template>
+
 
 <script>
 export default {

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Hash;
 use App\Models\Assignee;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -41,7 +42,8 @@ class AssigneeController extends Controller
 
         Assignee::create([
             'name' => ucwords($request->name),
-            'email' => $request->email
+            'email' => $request->email,
+            'password' => Hash::make('123@company'),
         ]);
 
         return redirect()->route('assignees')->banner('Assignee created successfully.');

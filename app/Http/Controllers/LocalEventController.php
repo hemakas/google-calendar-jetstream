@@ -10,6 +10,7 @@ use Inertia\Inertia;
 
 // google calendar plugin
 use Spatie\GoogleCalendar\Event;
+use Carbon\Carbon;
 
 class LocalEventController extends Controller
 {
@@ -75,12 +76,12 @@ class LocalEventController extends Controller
         }
 
         // save event on google calendar
-        // $event = Event::create([
-        //     'name' => $request->title,
-        //     'description' => $request->description,
-        //     'startDateTime' => $start,
-        //     'endDateTime' => $end
-        // ]);
+        $event = Event::create([
+            'name' => $request->title,
+            'description' => $request->description,
+            'startDateTime' => new Carbon($start),
+            'endDateTime' => new Carbon($end)
+        ]);
 
         return redirect()->route('events')->banner('Event created successfully.');
     }

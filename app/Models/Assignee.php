@@ -11,7 +11,8 @@ class Assignee extends Model
 
     protected $fillable = [
         'name',
-        'email'
+        'email',
+        'password'
     ];
 
     // protected $with = ["eventsList"];

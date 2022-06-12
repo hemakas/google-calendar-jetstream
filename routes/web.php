@@ -7,6 +7,7 @@ use Inertia\Inertia;
 // controllers
 use App\Http\Controllers\LocalEventController;
 use App\Http\Controllers\AssigneeController;
+use App\Http\Controllers\CustomLoginController;
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [
@@ -20,6 +21,10 @@ Route::get('/', function () {
 Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->name('dashboard');
+
+// custom login
+Route::get('/custom_login', [CustomLoginController::class, 'index'])->name('custom_login');
+Route::post('/custom_login/validate', [CustomLoginController::class, 'validate'])->name('custom_login.validate');
 
 // event routes
 Route::get('/events', [LocalEventController::class, 'index'])->name('events');
