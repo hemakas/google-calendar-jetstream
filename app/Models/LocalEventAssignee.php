@@ -10,6 +10,7 @@ class LocalEventAssignee extends Model
     use HasFactory;
 
     protected $fillable = [
+        'assigner_id',
         'assignee_id',
         'local_event_id'
     ];

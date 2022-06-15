@@ -20,7 +20,7 @@ class LocalEvent extends Model
     
     public function assigneeList()
     {
-        return $this->belongsToMany(Assignee::class, 'local_event_assignees');
+        return $this->belongsToMany(User::class, 'local_event_assignees');
     }
 
 }

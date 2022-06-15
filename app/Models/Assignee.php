@@ -17,8 +17,8 @@ class Assignee extends Model
 
     // protected $with = ["eventsList"];
 
-    public function eventsList()
-    {
-        return $this->belongsToMany(LocalEvent::class, 'local_event_assignees');
-    }
+    // public function eventsList()
+    // {
+    //     return $this->belongsToMany(LocalEvent::class, 'local_event_assignees');
+    // }
 }

@@ -70,11 +70,16 @@ class LocalEventController extends Controller
                 $assigneeId = $assigneeInfo[2];
 
                 LocalEventAssignee::create([
+                    'assigner_id' => Auth::user()->id,
                     'assignee_id' => $assigneeId,
                     'local_event_id' => $localEventId,
-                    'user_id' => Auth::user()->id,
                 ]);
             }
+        } else {
+            LocalEventAssignee::create([
+                'assigner_id' => Auth::user()->id,
+                'local_event_id' => $localEventId,
+            ]);
         }
 
         // save event on google calendar

@@ -16,15 +16,11 @@ class CreateLocalEventAssigneesTable extends Migration
         Schema::create('local_event_assignees', function (Blueprint $table) {
             $table->id();
 
-            $table->unsignedBigInteger('assigner_id');
-            $table->foreign('assigner_id')->references('id')->on('users');
-            
-            $table->unsignedBigInteger('assignee_id');
-            $table->foreign('assignee_id')->references('id')->on('users');
+            $table->unsignedBigInteger('user_id');
+            $table->foreign('user_id')->references('id')->on('users');
 
             $table->unsignedBigInteger('local_event_id');
             $table->foreign('local_event_id')->references('id')->on('local_events');
-
 
             $table->timestamps();
         });
