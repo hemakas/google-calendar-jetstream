@@ -9,20 +9,24 @@ use App\Http\Controllers\LocalEventController;
 use App\Http\Controllers\AssigneeController;
 use App\Http\Controllers\CustomLoginController;
 
-Route::get('/', function () {
-    return Inertia::render('Welcome', [
-        'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
-    ]);
-});
+// / page 
+Route::redirect('/', '/login');
 
-Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
-    return Inertia::render('Dashboard');
-})->name('dashboard');
+// Route::get('/', function () {
+//     return Inertia::render('Welcome', [
+//         'canLogin' => Route::has('login'),
+//         'canRegister' => Route::has('register'),
+//         'laravelVersion' => Application::VERSION,
+//         'phpVersion' => PHP_VERSION,
+//     ]);
+// });
 
-// custom login
+Route::middleware(['auth:sanctum', 'verified'])->get('/events', function () {
+    return Inertia::render('Events/Index');
+})->name('events');
+
+
+// custom login -- not completed
 Route::get('/custom_login', [CustomLoginController::class, 'index'])->name('custom_login');
 Route::post('/custom_login/validate', [CustomLoginController::class, 'validate'])->name('custom_login.validate');
 

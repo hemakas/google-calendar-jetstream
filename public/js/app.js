@@ -37735,38 +37735,13 @@ var render = function () {
                       [
                         _c(
                           "inertia-link",
-                          { attrs: { href: _vm.route("dashboard") } },
+                          { attrs: { href: _vm.route("events") } },
                           [
                             _c("jet-application-mark", {
                               staticClass: "block h-9 w-auto",
                             }),
                           ],
                           1
-                        ),
-                      ],
-                      1
-                    ),
-                    _vm._v(" "),
-                    _c(
-                      "div",
-                      {
-                        staticClass:
-                          "hidden space-x-8 sm:-my-px sm:ml-10 sm:flex",
-                      },
-                      [
-                        _c(
-                          "jet-nav-link",
-                          {
-                            attrs: {
-                              href: _vm.route("dashboard"),
-                              active: _vm.route().current("dashboard"),
-                            },
-                          },
-                          [
-                            _vm._v(
-                              "\n                                Dashboard\n                            "
-                            ),
-                          ]
                         ),
                       ],
                       1
@@ -38339,28 +38314,6 @@ var render = function () {
                 },
               },
               [
-                _c(
-                  "div",
-                  { staticClass: "pt-2 pb-3 space-y-1" },
-                  [
-                    _c(
-                      "jet-responsive-nav-link",
-                      {
-                        attrs: {
-                          href: _vm.route("dashboard"),
-                          active: _vm.route().current("dashboard"),
-                        },
-                      },
-                      [
-                        _vm._v(
-                          "\n                        Dashboard\n                    "
-                        ),
-                      ]
-                    ),
-                  ],
-                  1
-                ),
-                _vm._v(" "),
                 _c(
                   "div",
                   { staticClass: "pt-2 pb-3 space-y-1" },
