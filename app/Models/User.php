@@ -27,6 +27,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'level',
     ];
 
     /**
@@ -58,4 +59,11 @@ class User extends Authenticatable
     protected $appends = [
         'profile_photo_url',
     ];
+
+    protected $with = ["eventsList"];
+
+    public function eventsList()
+    {
+        return $this->belongsToMany(LocalEvent::class, 'local_event_assignees');
+    }
 }

@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Hash;
 use App\Models\Assignee;
+use App\Models\User;
+
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -19,7 +21,7 @@ class AssigneeController extends Controller
     // show all assignees
     public function index()
     {
-        $assignees = Assignee::orderBy('name', 'ASC')->get();
+        $assignees = User::where('level', 3)->orderBy('name', 'ASC')->get();
 
         return Inertia::render('Assignees/Index', [
             'assignees' => $assignees
@@ -40,10 +42,11 @@ class AssigneeController extends Controller
             'email' => 'required|email:rfc,dns'
         ]);
 
-        Assignee::create([
+        User::create([
             'name' => ucwords($request->name),
             'email' => $request->email,
             'password' => Hash::make('123@company'),
+            'level' => $request->level,
         ]);
 
         return redirect()->route('assignees')->banner('Assignee created successfully.');
@@ -58,7 +61,7 @@ class AssigneeController extends Controller
     // render edit page
     public function edit($id)
     {
-        $assignee = Assignee::find($id);
+        $assignee = User::find($id);
         
         return Inertia::render('Assignees/Edit', [
             'assignee' => $assignee
@@ -72,7 +75,7 @@ class AssigneeController extends Controller
             'email' => 'required|email:rfc,dns'
         ]);
 
-        $assignee = Assignee::find($id);
+        $assignee = User::find($id);
 
         $assignee->name = $request->name;
         $assignee->email = $request->email;
@@ -87,13 +90,11 @@ class AssigneeController extends Controller
     public function destroy($id)
     {
         try {
-            Assignee::destroy($id);
+            User::destroy($id);
             return redirect()->route('assignees')->banner('Assignee deleted successfully.', 'danger');
         } catch (\Exception $exception) {     
-            
             session()->flash('flash.banner', 'Assignee Cannot be deleted as he/she already signed with an event!');
             session()->flash('flash.bannerStyle', 'danger');
-
         } 
 
     }

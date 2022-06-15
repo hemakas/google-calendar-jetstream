@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <v-form ref="form" @submit.prevent="submit" v-model="valid" lazy-validation class="pa-md-6">
+    <v-form ref="form" @submit.prevent="validate" v-model="valid" lazy-validation class="pa-md-6">
       <v-row class="justify-center">
         <v-col cols="12" md="6">
       
@@ -33,8 +33,9 @@ export default {
   data () {
     return {
       form: {
-        name: null,
-        email: null,
+        name: '',
+        email: '',
+        level: 3,
       },
       
       valid: true,
@@ -60,12 +61,8 @@ export default {
       this.$refs.form.validate()
 
       if (this.valid) {
-        this.submit()
+        this.$inertia.post(`/assignees/store`, this.form)
       }
-    },
-
-    submit() {
-      this.$inertia.post(`/assignees/store`, this.form)
     },
 
     reset () {

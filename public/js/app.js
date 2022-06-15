@@ -2123,8 +2123,9 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       form: {
-        name: null,
-        email: null
+        name: '',
+        email: '',
+        level: 3
       },
       valid: true,
       nameRules: [function (v) {
@@ -2147,11 +2148,8 @@ __webpack_require__.r(__webpack_exports__);
       this.$refs.form.validate();
 
       if (this.valid) {
-        this.submit();
+        this.$inertia.post("/assignees/store", this.form);
       }
-    },
-    submit: function submit() {
-      this.$inertia.post("/assignees/store", this.form);
     },
     reset: function reset() {
       this.$refs.form.reset();
@@ -33772,7 +33770,7 @@ var render = function () {
           on: {
             submit: function ($event) {
               $event.preventDefault()
-              return _vm.submit.apply(null, arguments)
+              return _vm.validate.apply(null, arguments)
             },
           },
           model: {

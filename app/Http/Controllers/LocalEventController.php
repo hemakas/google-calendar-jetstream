@@ -3,10 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\LocalEvent;
-use App\Models\Assignee;
+use App\Models\User;
 use App\Models\LocalEventAssignee;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Illuminate\Support\Facades\Auth;
 
 // google calendar plugin
 use Spatie\GoogleCalendar\Event;
@@ -34,7 +35,7 @@ class LocalEventController extends Controller
     // render local event create page
     public function create()
     {
-        $assignees = Assignee::orderBy('name', 'ASC')->get();
+        $assignees = User::where('level', 3)->orderBy('name', 'ASC')->get();
 
         return Inertia::render('Events/Create', [
             'assignees' => $assignees
@@ -70,7 +71,8 @@ class LocalEventController extends Controller
 
                 LocalEventAssignee::create([
                     'assignee_id' => $assigneeId,
-                    'local_event_id' => $localEventId
+                    'local_event_id' => $localEventId,
+                    'user_id' => Auth::user()->id,
                 ]);
             }
         }
@@ -95,7 +97,7 @@ class LocalEventController extends Controller
     public function edit($id)
     {
         $localEvent = LocalEvent::find($id);  
-        $allAssignees = Assignee::orderBy('name', 'ASC')->get();
+        $allAssignees = User::where('level', 3)->orderBy('name', 'ASC')->get();
         $selectedAssignees = [];
 
         foreach ($localEvent->assigneeList as $assignee) {
