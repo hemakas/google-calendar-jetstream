@@ -2705,7 +2705,7 @@ __webpack_require__.r(__webpack_exports__);
 
       if (this.valid) {
         this.form.newSelectedAssignees = this.selectedItems;
-        this.$inertia.put("/events/".concat(this.event.id), this.form);
+        this.$inertia.patch("/events/".concat(this.event.id), this.form);
       }
     },
     reset: function reset() {
@@ -34839,7 +34839,6 @@ var render = function () {
             {
               staticClass: "mr-4",
               attrs: { type: "submit", disabled: !_vm.valid, color: "success" },
-              on: { click: _vm.validate },
             },
             [_vm._v("\n      Submit\n    ")]
           ),

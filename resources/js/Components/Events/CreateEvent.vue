@@ -76,7 +76,7 @@
       </v-row>
 
       <!-- submit button -->
-      <v-btn type="submit" :disabled="!valid" color="success" class="mr-4" @click="validate">
+      <v-btn type="submit" :disabled="!valid" color="success" class="mr-4">
         Submit
       </v-btn>
 

@@ -143,7 +143,7 @@ export default {
 
       if (this.valid) {
         this.form.newSelectedAssignees = this.selectedItems
-        this.$inertia.put(`/events/${this.event.id}`, this.form)     
+        this.$inertia.patch(`/events/${this.event.id}`, this.form)     
       }
     },
 

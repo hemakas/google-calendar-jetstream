@@ -15,6 +15,7 @@ class CreateLocalEventsTable extends Migration
     {
         Schema::create('local_events', function (Blueprint $table) {
             $table->id();
+            $table->string('google_id')->nullable();
             $table->string('title');
             $table->string('description')->nullable();
             $table->dateTime('start');

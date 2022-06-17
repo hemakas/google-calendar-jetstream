@@ -10,6 +10,7 @@ class LocalEvent extends Model
     use HasFactory;
 
     protected $fillable = [
+        'google_id',
         'title',
         'description',
         'start',

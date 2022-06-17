@@ -53,9 +53,22 @@ class LocalEventController extends Controller
         $start = date('Y-m-d H:i:s', strtotime("$request->startDate $request->startTime"));
         $end = date('Y-m-d H:i:s', strtotime("$request->endDate $request->endTime"));
 
+        // save event on google
+        $event = Event::create([
+            'name' => $request->title,
+            'description' => $request->description,
+            'startDateTime' => new Carbon($start, 'Asia/Colombo'),
+            'endDateTime' => new Carbon($end, 'Asia/Colombo')
+        ]);
+
+        // get google event id
+        $googleEventId = $event->id;
+
+        // save event on local db
         $localEvent = LocalEvent::create([
+            'google_id' => $googleEventId,
             'title' => $request->title,
-            'description' => $request->descriLocalEventAssigneeption,
+            'description' => $request->description,
             'start' => $start,
             'end' => $end
         ]);
@@ -63,6 +76,7 @@ class LocalEventController extends Controller
         $localEventId = $localEvent->id;
         $selectedAssignees = $request->selectedAssignees;
 
+        // check if the event is created by an admin and invitations have sent
         if (!empty($selectedAssignees)) {     
 
             foreach ($selectedAssignees as $selectedAssignee) {
@@ -70,25 +84,21 @@ class LocalEventController extends Controller
                 $assigneeId = $assigneeInfo[2];
 
                 LocalEventAssignee::create([
-                    'assigner_id' => Auth::user()->id,
-                    'assignee_id' => $assigneeId,
+                    'user_id' => $assigneeId,
                     'local_event_id' => $localEventId,
                 ]);
             }
         } else {
-            LocalEventAssignee::create([
-                'assigner_id' => Auth::user()->id,
-                'local_event_id' => $localEventId,
-            ]);
+            // check if the event is created by an employee
+            if (Auth::user()->level == 3) {
+                LocalEventAssignee::create([
+                    'user_id' => Auth::user()->id,
+                    'local_event_id' => $localEventId,
+                ]);
+            }
         }
 
-        // save event on google calendar
-        $event = Event::create([
-            'name' => $request->title,
-            'description' => $request->description,
-            'startDateTime' => new Carbon($start),
-            'endDateTime' => new Carbon($end)
-        ]);
+        
 
         return redirect()->route('events')->banner('Event created successfully.');
     }
@@ -127,14 +137,38 @@ class LocalEventController extends Controller
         $start = date('Y-m-d H:i:s', strtotime("$request->startDate $request->startTime"));
         $end = date('Y-m-d H:i:s', strtotime("$request->endDate $request->endTime"));
 
+        // update local event
         $localEvent = LocalEvent::find($id);
-        
         $localEvent->title = $request->title;
         $localEvent->description = $request->description;
         $localEvent->start = $start;
         $localEvent->end = $end;
-
         $localEvent->update();
+
+        // $data = $request->json()->all();
+        
+        // $startDate = $data['startDate'];
+        // $startTime = $data['startTime'];
+        // $endDate = $data['endDate'];
+        // $endTime = $data['endTime'];
+
+        // $startJson = date('Y-m-d H:i:s', strtotime("$startDate $startTime"));
+        // $endJson = date('Y-m-d H:i:s', strtotime("$endDate $endTime"));
+        
+        // update google event
+        $event = Event::find($localEvent->google_id);
+        // $event->title = $data['title'];
+        // $event->description = $data['description'];
+        // $event->start = new Carbon($startJson, 'Asia/Colombo');
+        // $event->end = new Carbon($endJson, 'Asia/Colombo');
+        // $event->save();
+
+        $event->update([
+            'title' =>  $request->title,
+            'description' => $request->description,
+            'start' => new Carbon($start, 'Asia/Colombo'),
+            'end' => new Carbon($end, 'Asia/Colombo')
+        ]);
 
         $newSelectedAssignees = $request->newSelectedAssignees;
 
@@ -142,15 +176,23 @@ class LocalEventController extends Controller
         $LocalEventAssignees = LocalEventAssignee::where('local_event_id', $id)->delete();
 
         // add new assignees to the event
-        if (!empty($newSelectedAssignees)) {     
+        if (!empty($newSelectedAssignees)) {
 
             foreach ($newSelectedAssignees as $newSelectedAssignee) {
                 $assigneeInfo = explode('-', $newSelectedAssignee);
                 $assigneeId = $assigneeInfo[2];
 
                 LocalEventAssignee::create([
-                    'assignee_id' => $assigneeId,
+                    'user_id' => $assigneeId,
                     'local_event_id' => $id
+                ]);
+            }
+        } else {
+            // check if the event is created by an employee
+            if (Auth::user()->level == 3) {
+                LocalEventAssignee::create([
+                    'user_id' => Auth::user()->id,
+                    'local_event_id' => $id,
                 ]);
             }
         }
@@ -161,11 +203,17 @@ class LocalEventController extends Controller
     // delete event
     public function destroy($id)
     {
-        
+
         // delete all assignees from the event
         $LocalEventAssignee = LocalEventAssignee::where('local_event_id', $id)->delete();
+
+         // delete google event
+         $localEvent = LocalEvent::find($id);
+         $event = Event::find($localEvent->google_id);
+         $event->delete();
         
-        LocalEvent::destroy($id);
+        // delete local event
+        $localEvent->delete();
 
         return redirect()->route('events')->banner('Event deleted successfully.');
     }

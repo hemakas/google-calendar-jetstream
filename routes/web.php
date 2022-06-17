@@ -35,7 +35,7 @@ Route::get('/events', [LocalEventController::class, 'index'])->name('events');
 Route::get('/events/create', [LocalEventController::class, 'create'])->name('events.create');
 Route::post('/events/store', [LocalEventController::class, 'store'])->name('events.store');
 Route::get('/events/{event}/edit', [LocalEventController::class, 'edit'])->name('events.edit');
-Route::put('/events/{event}', [LocalEventController::class, 'update'])->name('events.update');
+Route::patch('/events/{event}', [LocalEventController::class, 'update'])->name('events.update');
 Route::delete('/events/{event}', [LocalEventController::class, 'destroy'])->name('events.destroy');
 
 // assignees routes
