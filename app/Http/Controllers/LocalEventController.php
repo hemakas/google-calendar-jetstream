@@ -45,11 +45,12 @@ class LocalEventController extends Controller
     // save new local event
     public function store(Request $request)
     {
-        $this->validate($request , [
-            'startDate' => 'required|date',
-            'endTime' => 'after|startTime',
-            'endDate' => 'required|date|after_or_equal:startDate'
-        ]);
+        $this->validate(
+            $request, [
+                'startDate' => 'required|date',
+                'endDate' => 'required|date|after:startDate', // end date should be after start date
+            ]
+        );
 
         $start = date('Y-m-d H:i:s', strtotime("$request->startDate $request->startTime"));
         $end = date('Y-m-d H:i:s', strtotime("$request->endDate $request->endTime"));
@@ -126,16 +127,11 @@ class LocalEventController extends Controller
     {
         
         $this->validate(
-            $request , 
-            [
+            $request, [
                 'startDate' => 'required|date',
-                'endTime' => 'after:startTime',
-                'endDate' => 'required|date|after_or_equal:startDate'
-            ],
-            [
-                'endTime.after' => 'The event end time must be a time after the start time of the event'
+                'endDate' => 'required|date|after:startDate', // end date should be after start date
             ]
-    );
+        );
 
         $start = date('Y-m-d H:i:s', strtotime("$request->startDate $request->startTime"));
         $end = date('Y-m-d H:i:s', strtotime("$request->endDate $request->endTime"));
@@ -185,13 +181,14 @@ class LocalEventController extends Controller
     public function destroy($id)
     {
 
+        $localEvent = LocalEvent::find($id);
+        
         // delete all assignees from the event
-        $LocalEventAssignee = LocalEventAssignee::where('local_event_id', $id)->delete();
+        $localEvent->users()->detach();
 
-         // delete google event
-         $localEvent = LocalEvent::find($id);
-         $event = Event::find($localEvent->google_id);
-         $event->delete();
+        // delete google event
+        $event = Event::find($localEvent->google_id);
+        $event->delete();
         
         // delete local event
         $localEvent->delete();
