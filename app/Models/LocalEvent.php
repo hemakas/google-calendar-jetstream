@@ -17,11 +17,11 @@ class LocalEvent extends Model
         'end'
     ];
     
-    protected $with = ["assigneeList"];
+    protected $with = ["users"];
     
-    public function assigneeList()
+    public function users()
     {
-        return $this->belongsToMany(User::class, 'local_event_assignees');
+        return $this->belongsToMany(User::class)->withTimestamps();;
     }
 
 }

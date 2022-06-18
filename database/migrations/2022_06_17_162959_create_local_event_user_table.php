@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateLocalEventAssigneesTable extends Migration
+class CreateLocalEventUserTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateLocalEventAssigneesTable extends Migration
      */
     public function up()
     {
-        Schema::create('local_event_assignees', function (Blueprint $table) {
+        Schema::create('local_event_user', function (Blueprint $table) {
             $table->id();
 
             $table->unsignedBigInteger('user_id');
@@ -33,6 +33,6 @@ class CreateLocalEventAssigneesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('local_event_assignees');
+        Schema::dropIfExists('local_event_user');
     }
 }

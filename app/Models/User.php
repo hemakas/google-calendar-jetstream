@@ -60,10 +60,10 @@ class User extends Authenticatable
         'profile_photo_url',
     ];
 
-    protected $with = ["eventsList"];
+    // protected $with = ["localEvents"];
 
-    public function eventsList()
+    public function localEvents()
     {
-        return $this->belongsToMany(LocalEvent::class, 'local_event_assignees');
+        return $this->belongsToMany(LocalEvent::class)->withTimestamps();;
     }
 }

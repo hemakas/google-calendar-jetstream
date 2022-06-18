@@ -35217,6 +35217,12 @@ var render = function () {
                     ],
                     1
                   ),
+                  _vm._v(" "),
+                  _vm.errors.endDate
+                    ? _c("p", { staticClass: "text-red-500 text-xs mt-3" }, [
+                        _vm._v(_vm._s(_vm.errors.endDate)),
+                      ])
+                    : _vm._e(),
                 ],
                 1
               ),
@@ -35339,6 +35345,12 @@ var render = function () {
                     ],
                     1
                   ),
+                  _vm._v(" "),
+                  _vm.errors.endTime
+                    ? _c("p", { staticClass: "text-red-500 text-xs mt-3" }, [
+                        _vm._v(_vm._s(_vm.errors.endTime)),
+                      ])
+                    : _vm._e(),
                 ],
                 1
               ),
@@ -40665,7 +40677,7 @@ var render = function () {
                   staticClass:
                     "font-semibold text-xl text-gray-800 leading-tight",
                 },
-                [_vm._v("\n            Events Create\n        ")]
+                [_vm._v("\n            Event Edit\n        ")]
               ),
             ]
           },

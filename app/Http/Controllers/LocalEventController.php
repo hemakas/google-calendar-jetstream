@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\LocalEvent;
 use App\Models\User;
-use App\Models\LocalEventAssignee;
+// use App\Models\LocalEventAssignee;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Auth;
@@ -47,6 +47,7 @@ class LocalEventController extends Controller
     {
         $this->validate($request , [
             'startDate' => 'required|date',
+            'endTime' => 'after|startTime',
             'endDate' => 'required|date|after_or_equal:startDate'
         ]);
 
@@ -77,28 +78,22 @@ class LocalEventController extends Controller
         $selectedAssignees = $request->selectedAssignees;
 
         // check if the event is created by an admin and invitations have sent
-        if (!empty($selectedAssignees)) {     
-
+        if (!empty($selectedAssignees)) {
+            
             foreach ($selectedAssignees as $selectedAssignee) {
                 $assigneeInfo = explode('-', $selectedAssignee);
                 $assigneeId = $assigneeInfo[2];
 
-                LocalEventAssignee::create([
-                    'user_id' => $assigneeId,
-                    'local_event_id' => $localEventId,
-                ]);
+                $localEvent = LocalEvent::find($localEventId);
+                $localEvent->users()->attach($assigneeId);
             }
         } else {
             // check if the event is created by an employee
             if (Auth::user()->level == 3) {
-                LocalEventAssignee::create([
-                    'user_id' => Auth::user()->id,
-                    'local_event_id' => $localEventId,
-                ]);
+                $localEvent = LocalEvent::find($localEventId);
+                $localEvent->users()->attach(Auth::user()->id);
             }
         }
-
-        
 
         return redirect()->route('events')->banner('Event created successfully.');
     }
@@ -115,8 +110,8 @@ class LocalEventController extends Controller
         $allAssignees = User::where('level', 3)->orderBy('name', 'ASC')->get();
         $selectedAssignees = [];
 
-        foreach ($localEvent->assigneeList as $assignee) {
-            $selectedAssignees[] = $assignee;
+        foreach ($localEvent->users as $user) {
+            $selectedAssignees[] = $user;
         }
 
         return Inertia::render('Events/Edit', [
@@ -129,10 +124,18 @@ class LocalEventController extends Controller
     // update event
     public function update(Request $request, $id)
     {
-        $this->validate($request , [
-            'startDate' => 'required|date',
-            'endDate' => 'required|date|after_or_equal:startDate'
-        ]);
+        
+        $this->validate(
+            $request , 
+            [
+                'startDate' => 'required|date',
+                'endTime' => 'after:startTime',
+                'endDate' => 'required|date|after_or_equal:startDate'
+            ],
+            [
+                'endTime.after' => 'The event end time must be a time after the start time of the event'
+            ]
+    );
 
         $start = date('Y-m-d H:i:s', strtotime("$request->startDate $request->startTime"));
         $end = date('Y-m-d H:i:s', strtotime("$request->endDate $request->endTime"));
@@ -145,55 +148,33 @@ class LocalEventController extends Controller
         $localEvent->end = $end;
         $localEvent->update();
 
-        // $data = $request->json()->all();
-        
-        // $startDate = $data['startDate'];
-        // $startTime = $data['startTime'];
-        // $endDate = $data['endDate'];
-        // $endTime = $data['endTime'];
-
-        // $startJson = date('Y-m-d H:i:s', strtotime("$startDate $startTime"));
-        // $endJson = date('Y-m-d H:i:s', strtotime("$endDate $endTime"));
-        
         // update google event
-        $event = Event::find($localEvent->google_id);
+        // $event = Event::find($localEvent->google_id);
         // $event->title = $data['title'];
         // $event->description = $data['description'];
         // $event->start = new Carbon($startJson, 'Asia/Colombo');
         // $event->end = new Carbon($endJson, 'Asia/Colombo');
         // $event->save();
 
-        $event->update([
-            'title' =>  $request->title,
-            'description' => $request->description,
-            'start' => new Carbon($start, 'Asia/Colombo'),
-            'end' => new Carbon($end, 'Asia/Colombo')
-        ]);
-
         $newSelectedAssignees = $request->newSelectedAssignees;
 
         // delete all assignees from the event
-        $LocalEventAssignees = LocalEventAssignee::where('local_event_id', $id)->delete();
+        $localEvent->users()->detach();
 
-        // add new assignees to the event
         if (!empty($newSelectedAssignees)) {
-
+            // one to many assignees are in the array
             foreach ($newSelectedAssignees as $newSelectedAssignee) {
                 $assigneeInfo = explode('-', $newSelectedAssignee);
                 $assigneeId = $assigneeInfo[2];
 
-                LocalEventAssignee::create([
-                    'user_id' => $assigneeId,
-                    'local_event_id' => $id
-                ]);
+                $localEvent = LocalEvent::find($id);
+                $localEvent->users()->attach($assigneeId);
             }
         } else {
             // check if the event is created by an employee
             if (Auth::user()->level == 3) {
-                LocalEventAssignee::create([
-                    'user_id' => Auth::user()->id,
-                    'local_event_id' => $id,
-                ]);
+                $localEvent = LocalEvent::find($localEventId);
+                $localEvent->users()->attach(Auth::user()->id);
             }
         }
 

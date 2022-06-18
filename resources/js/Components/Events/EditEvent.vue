@@ -1,7 +1,6 @@
 <template>
   <v-app>
     <v-form ref="form" @submit.prevent="validate" v-model="valid" lazy-validation class="pa-md-4 mx-lg-auto">
-
       <!-- title -->
       <v-text-field v-model="form.title" :rules="titleRules" label="Title" required></v-text-field>
 
@@ -46,6 +45,7 @@
             </template>
             <v-date-picker v-model="form.endDate" @input="endDateMenu = false"></v-date-picker>
           </v-menu>
+          <p v-if="errors.endDate" class="text-red-500 text-xs mt-3">{{ errors.endDate }}</p>
         </v-col>
         
         <v-col cols="12" md="3">
@@ -53,8 +53,7 @@
           <v-dialog ref="endTimeRef" v-model="endTimeModal" :return-value.sync="form.endTime" persistent width="290px">
             <template v-slot:activator="{ on, attrs }">
               <v-text-field v-model="form.endTime" label="End Time" prepend-icon="mdi-clock-time-four-outline" readonly v-bind="attrs" v-on="on"></v-text-field>
-            </template>
-            
+            </template>            
             <v-time-picker v-if="endTimeModal" v-model="form.endTime" full-width>
               <v-spacer></v-spacer>
               <v-btn text color="primary" @click="endTimeModal = false">
@@ -65,6 +64,7 @@
               </v-btn>
             </v-time-picker>
           </v-dialog>
+          <p v-if="errors.endTime" class="text-red-500 text-xs mt-3">{{ errors.endTime }}</p>
         </v-col>
       </v-row>
       

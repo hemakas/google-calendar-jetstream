@@ -15,10 +15,4 @@ class Assignee extends Model
         'password'
     ];
 
-    // protected $with = ["eventsList"];
-
-    // public function eventsList()
-    // {
-    //     return $this->belongsToMany(LocalEvent::class, 'local_event_assignees');
-    // }
 }
