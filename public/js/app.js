@@ -2840,6 +2840,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   beforeCreate: function beforeCreate() {
     this.$options.components.DeleteModal = (__webpack_require__(/*! ../Elements/DeleteModal.vue */ "./resources/js/Components/Elements/DeleteModal.vue")["default"]);
@@ -35662,8 +35666,20 @@ var render = function () {
                               "px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900",
                           },
                           [
-                            _vm._v(
-                              "\n                  assigned to\n                "
+                            _c(
+                              "ul",
+                              _vm._l(event.users, function (user, index) {
+                                return _c("li", { key: user.id }, [
+                                  _vm._v(
+                                    "\n                      " +
+                                      _vm._s(index + 1) +
+                                      " / " +
+                                      _vm._s(user.name) +
+                                      "\n                    "
+                                  ),
+                                ])
+                              }),
+                              0
                             ),
                           ]
                         ),

@@ -54,7 +54,11 @@
                     <span class="text-red-600">{{ formatDateTime(event.end) }}</span>
                   </td>
                   <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                    assigned to
+                    <ul>
+                      <li v-for="(user, index) in event.users" :key="user.id">
+                        {{ index + 1 }} / {{ user.name }}
+                      </li>
+                    </ul>
                   </td>
                   <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                     assigned by
