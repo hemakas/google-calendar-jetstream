@@ -35692,7 +35692,7 @@ var render = function () {
                           },
                           [
                             _vm._v(
-                              "\n                  assigned by\n                "
+                              "\n                 Assigend by\n                "
                             ),
                           ]
                         ),

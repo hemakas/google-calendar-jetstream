@@ -22,6 +22,9 @@ class CreateLocalEventUserTable extends Migration
             $table->unsignedBigInteger('local_event_id');
             $table->foreign('local_event_id')->references('id')->on('local_events');
 
+            $table->unsignedBigInteger('creator')->nullable();
+            $table->foreign('creator')->references('id')->on('users');
+
             $table->timestamps();
         });
     }

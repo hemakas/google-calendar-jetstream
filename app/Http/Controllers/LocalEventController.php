@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\LocalEvent;
 use App\Models\User;
-// use App\Models\LocalEventAssignee;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Auth;
@@ -86,13 +85,17 @@ class LocalEventController extends Controller
                 $assigneeId = $assigneeInfo[2];
 
                 $localEvent = LocalEvent::find($localEventId);
-                $localEvent->users()->attach($assigneeId);
+                $localEvent->users()->attach($assigneeId, [
+                    'creator' => Auth::user()->id
+                ]);
             }
         } else {
             // check if the event is created by an employee
             if (Auth::user()->level == 3) {
                 $localEvent = LocalEvent::find($localEventId);
-                $localEvent->users()->attach(Auth::user()->id);
+                $localEvent->users()->attach(Auth::user()->id, [
+                    'creator' => Athu::user()->id
+                ]);
             }
         }
 
@@ -164,13 +167,17 @@ class LocalEventController extends Controller
                 $assigneeId = $assigneeInfo[2];
 
                 $localEvent = LocalEvent::find($id);
-                $localEvent->users()->attach($assigneeId);
+                $localEvent->users()->attach($assigneeId, [
+                    'creator' => Auth::user()->id
+                ]);
             }
         } else {
             // check if the event is created by an employee
             if (Auth::user()->level == 3) {
                 $localEvent = LocalEvent::find($localEventId);
-                $localEvent->users()->attach(Auth::user()->id);
+                $localEvent->users()->attach(Auth::user()->id, [
+                    'creator' => Athu::user()->id
+                ]);
             }
         }
 
