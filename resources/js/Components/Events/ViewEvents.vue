@@ -21,13 +21,13 @@
                     Started on
                   </th>
                   <th scope="col" class="text-sm font-medium text-gray-900 px-6 py-4">
-                    Ended on
+                    Ending on
                   </th>
-                  <th scope="col" class="text-sm font-medium text-gray-900 px-6 py-4">
+                  <th v-if="userLevel < 3" scope="col" class="text-sm font-medium text-gray-900 px-6 py-4">
                     Assigned to
                   </th>
                   <th scope="col" class="text-sm font-medium text-gray-900 px-6 py-4">
-                    Assigned by
+                    Created by
                   </th>
                   <th scope="col" class="text-sm font-medium text-gray-900 px-6 py-4">
                     Action
@@ -53,7 +53,7 @@
                   <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                     <span class="text-red-600">{{ formatDateTime(event.end) }}</span>
                   </td>
-                  <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                  <td v-if="userLevel < 3" class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                     <ul>
                       <li v-for="(user, index) in event.users" :key="user.id">
                         {{ index + 1 }} / {{ user.name }}
@@ -61,7 +61,7 @@
                     </ul>
                   </td>
                   <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                   Assigend by
+                    {{ event.creator.name }}
                   </td>
                   <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                     <div class="flex items-center justify-center">
@@ -108,6 +108,7 @@ export default {
 
     props: {
       events: {},
+      userLevel: {}
     },
     
     methods: {

@@ -26,7 +26,8 @@
                                     Events
                                 </jet-nav-link>
                             </div>
-                            <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                            
+                            <div v-if="$page.props.user.level < 3" class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
                                 <jet-nav-link :href="route('assignees')" :active="route().current('assignees*')">
                                     Assignees
                                 </jet-nav-link>

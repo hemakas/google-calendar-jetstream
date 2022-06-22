@@ -68,7 +68,7 @@
         </v-col>
       </v-row>
       
-      <v-row>
+      <v-row  v-if="userLevel < 3">
         <v-col cols="12" md="12" class="mb-4">
           <!-- assignee -->
           <v-select v-model="selectedItems" :items="items" :menu-props="{ maxHeight: '400' }" label="Assignee" multiple hint="Select whom to assign" persistent-hint>
@@ -104,6 +104,7 @@ export default {
     event: {},
     allAssignees: {},
     selectedAssignees: {},
+    userLevel: {},
     errors: {}
   },
   

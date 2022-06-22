@@ -14,14 +14,20 @@ class LocalEvent extends Model
         'title',
         'description',
         'start',
-        'end'
+        'end',
+        'created_by'
     ];
     
-    protected $with = ["users"];
+    protected $with = ["users", "creator"];
     
     public function users()
     {
         return $this->belongsToMany(User::class)->withPivot('creator')->withTimestamps();
+    }
+
+    public function creator()
+    {
+        return $this->belongsTo(User::class, 'created_by');
     }
 
 }

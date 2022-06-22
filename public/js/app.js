@@ -2499,6 +2499,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
@@ -2524,7 +2525,9 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   props: {
-    assignees: {}
+    assignees: {},
+    userLevel: {},
+    errors: {}
   },
   methods: {
     validate: function validate() {
@@ -2673,6 +2676,7 @@ __webpack_require__.r(__webpack_exports__);
     event: {},
     allAssignees: {},
     selectedAssignees: {},
+    userLevel: {},
     errors: {}
   },
   data: function data() {
@@ -2856,7 +2860,8 @@ __webpack_require__.r(__webpack_exports__);
   components: {// Pagination
   },
   props: {
-    events: {}
+    events: {},
+    userLevel: {}
   },
   methods: {
     deleteConfirmation: function deleteConfirmation(id) {
@@ -3978,6 +3983,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Jetstream_DropdownLink__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @/Jetstream/DropdownLink */ "./resources/js/Jetstream/DropdownLink.vue");
 /* harmony import */ var _Jetstream_NavLink__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @/Jetstream/NavLink */ "./resources/js/Jetstream/NavLink.vue");
 /* harmony import */ var _Jetstream_ResponsiveNavLink__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @/Jetstream/ResponsiveNavLink */ "./resources/js/Jetstream/ResponsiveNavLink.vue");
+//
 //
 //
 //
@@ -5482,6 +5488,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
@@ -5491,6 +5498,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   props: {
     assignees: {},
+    userLevel: {},
     errors: {}
   }
 });
@@ -5533,6 +5541,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
@@ -5544,6 +5553,7 @@ __webpack_require__.r(__webpack_exports__);
     event: {},
     allAssignees: {},
     selectedAssignees: {},
+    userLevel: {},
     errors: {}
   }
 });
@@ -34678,6 +34688,12 @@ var render = function () {
                     ],
                     1
                   ),
+                  _vm._v(" "),
+                  _vm.errors.endDate
+                    ? _c("p", { staticClass: "text-red-500 text-xs mt-3" }, [
+                        _vm._v(_vm._s(_vm.errors.endDate)),
+                      ])
+                    : _vm._e(),
                 ],
                 1
               ),
@@ -34807,36 +34823,38 @@ var render = function () {
             1
           ),
           _vm._v(" "),
-          _c(
-            "v-row",
-            [
-              _c(
-                "v-col",
-                { staticClass: "mb-4", attrs: { cols: "12", md: "12" } },
+          _vm.userLevel < 3
+            ? _c(
+                "v-row",
                 [
-                  _c("v-select", {
-                    attrs: {
-                      items: _vm.items,
-                      "menu-props": { maxHeight: "400" },
-                      label: "Assignee",
-                      multiple: "",
-                      hint: "Select whom to assign",
-                      "persistent-hint": "",
-                    },
-                    model: {
-                      value: _vm.form.selectedAssignees,
-                      callback: function ($$v) {
-                        _vm.$set(_vm.form, "selectedAssignees", $$v)
-                      },
-                      expression: "form.selectedAssignees",
-                    },
-                  }),
+                  _c(
+                    "v-col",
+                    { staticClass: "mb-4", attrs: { cols: "12", md: "12" } },
+                    [
+                      _c("v-select", {
+                        attrs: {
+                          items: _vm.items,
+                          "menu-props": { maxHeight: "400" },
+                          label: "Assignee",
+                          multiple: "",
+                          hint: "Select whom to assign",
+                          "persistent-hint": "",
+                        },
+                        model: {
+                          value: _vm.form.selectedAssignees,
+                          callback: function ($$v) {
+                            _vm.$set(_vm.form, "selectedAssignees", $$v)
+                          },
+                          expression: "form.selectedAssignees",
+                        },
+                      }),
+                    ],
+                    1
+                  ),
                 ],
                 1
-              ),
-            ],
-            1
-          ),
+              )
+            : _vm._e(),
           _vm._v(" "),
           _c(
             "v-btn",
@@ -35362,66 +35380,78 @@ var render = function () {
             1
           ),
           _vm._v(" "),
-          _c(
-            "v-row",
-            [
-              _c(
-                "v-col",
-                { staticClass: "mb-4", attrs: { cols: "12", md: "12" } },
+          _vm.userLevel < 3
+            ? _c(
+                "v-row",
                 [
-                  _c("v-select", {
-                    attrs: {
-                      items: _vm.items,
-                      "menu-props": { maxHeight: "400" },
-                      label: "Assignee",
-                      multiple: "",
-                      hint: "Select whom to assign",
-                      "persistent-hint": "",
-                    },
-                    scopedSlots: _vm._u([
-                      {
-                        key: "selection",
-                        fn: function (ref) {
-                          var item = ref.item
-                          var index = ref.index
-                          return [
-                            index === 0
-                              ? _c("v-chip", [
-                                  _c("span", [_vm._v(_vm._s(item))]),
-                                ])
-                              : _vm._e(),
-                            _vm._v(" "),
-                            index === 1
-                              ? _c(
-                                  "span",
-                                  { staticClass: "grey--text text-caption" },
-                                  [
-                                    _vm._v(
-                                      "\n              (+" +
-                                        _vm._s(_vm.selectedItems.length - 1) +
-                                        " others)\n            "
-                                    ),
-                                  ]
-                                )
-                              : _vm._e(),
-                          ]
+                  _c(
+                    "v-col",
+                    { staticClass: "mb-4", attrs: { cols: "12", md: "12" } },
+                    [
+                      _c("v-select", {
+                        attrs: {
+                          items: _vm.items,
+                          "menu-props": { maxHeight: "400" },
+                          label: "Assignee",
+                          multiple: "",
+                          hint: "Select whom to assign",
+                          "persistent-hint": "",
                         },
-                      },
-                    ]),
-                    model: {
-                      value: _vm.selectedItems,
-                      callback: function ($$v) {
-                        _vm.selectedItems = $$v
-                      },
-                      expression: "selectedItems",
-                    },
-                  }),
+                        scopedSlots: _vm._u(
+                          [
+                            {
+                              key: "selection",
+                              fn: function (ref) {
+                                var item = ref.item
+                                var index = ref.index
+                                return [
+                                  index === 0
+                                    ? _c("v-chip", [
+                                        _c("span", [_vm._v(_vm._s(item))]),
+                                      ])
+                                    : _vm._e(),
+                                  _vm._v(" "),
+                                  index === 1
+                                    ? _c(
+                                        "span",
+                                        {
+                                          staticClass:
+                                            "grey--text text-caption",
+                                        },
+                                        [
+                                          _vm._v(
+                                            "\n              (+" +
+                                              _vm._s(
+                                                _vm.selectedItems.length - 1
+                                              ) +
+                                              " others)\n            "
+                                          ),
+                                        ]
+                                      )
+                                    : _vm._e(),
+                                ]
+                              },
+                            },
+                          ],
+                          null,
+                          false,
+                          3676840522
+                        ),
+                        model: {
+                          value: _vm.selectedItems,
+                          callback: function ($$v) {
+                            _vm.selectedItems = $$v
+                          },
+                          expression: "selectedItems",
+                        },
+                      }),
+                    ],
+                    1
+                  ),
                 ],
                 1
-              ),
-            ],
-            1
-          ),
+              )
+            : _vm._e(),
           _vm._v(" "),
           _c(
             "v-btn",
@@ -35538,23 +35568,29 @@ var render = function () {
                           "text-sm font-medium text-gray-900 px-6 py-4",
                         attrs: { scope: "col" },
                       },
-                      [_vm._v("\n                  Ended on\n                ")]
-                    ),
-                    _vm._v(" "),
-                    _c(
-                      "th",
-                      {
-                        staticClass:
-                          "text-sm font-medium text-gray-900 px-6 py-4",
-                        attrs: { scope: "col" },
-                      },
                       [
                         _vm._v(
-                          "\n                  Assigned to\n                "
+                          "\n                  Ending on\n                "
                         ),
                       ]
                     ),
                     _vm._v(" "),
+                    _vm.userLevel < 3
+                      ? _c(
+                          "th",
+                          {
+                            staticClass:
+                              "text-sm font-medium text-gray-900 px-6 py-4",
+                            attrs: { scope: "col" },
+                          },
+                          [
+                            _vm._v(
+                              "\n                  Assigned to\n                "
+                            ),
+                          ]
+                        )
+                      : _vm._e(),
+                    _vm._v(" "),
                     _c(
                       "th",
                       {
@@ -35564,7 +35600,7 @@ var render = function () {
                       },
                       [
                         _vm._v(
-                          "\n                  Assigned by\n                "
+                          "\n                  Created by\n                "
                         ),
                       ]
                     ),
@@ -35659,30 +35695,32 @@ var render = function () {
                           ]
                         ),
                         _vm._v(" "),
-                        _c(
-                          "td",
-                          {
-                            staticClass:
-                              "px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900",
-                          },
-                          [
-                            _c(
-                              "ul",
-                              _vm._l(event.users, function (user, index) {
-                                return _c("li", { key: user.id }, [
-                                  _vm._v(
-                                    "\n                      " +
-                                      _vm._s(index + 1) +
-                                      " / " +
-                                      _vm._s(user.name) +
-                                      "\n                    "
-                                  ),
-                                ])
-                              }),
-                              0
-                            ),
-                          ]
-                        ),
+                        _vm.userLevel < 3
+                          ? _c(
+                              "td",
+                              {
+                                staticClass:
+                                  "px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900",
+                              },
+                              [
+                                _c(
+                                  "ul",
+                                  _vm._l(event.users, function (user, index) {
+                                    return _c("li", { key: user.id }, [
+                                      _vm._v(
+                                        "\n                      " +
+                                          _vm._s(index + 1) +
+                                          " / " +
+                                          _vm._s(user.name) +
+                                          "\n                    "
+                                      ),
+                                    ])
+                                  }),
+                                  0
+                                ),
+                              ]
+                            )
+                          : _vm._e(),
                         _vm._v(" "),
                         _c(
                           "td",
@@ -35692,7 +35730,9 @@ var render = function () {
                           },
                           [
                             _vm._v(
-                              "\n                 Assigend by\n                "
+                              "\n                  " +
+                                _vm._s(event.creator.name) +
+                                "\n                "
                             ),
                           ]
                         ),
@@ -37799,30 +37839,32 @@ var render = function () {
                       1
                     ),
                     _vm._v(" "),
-                    _c(
-                      "div",
-                      {
-                        staticClass:
-                          "hidden space-x-8 sm:-my-px sm:ml-10 sm:flex",
-                      },
-                      [
-                        _c(
-                          "jet-nav-link",
+                    _vm.$page.props.user.level < 3
+                      ? _c(
+                          "div",
                           {
-                            attrs: {
-                              href: _vm.route("assignees"),
-                              active: _vm.route().current("assignees*"),
-                            },
+                            staticClass:
+                              "hidden space-x-8 sm:-my-px sm:ml-10 sm:flex",
                           },
                           [
-                            _vm._v(
-                              "\n                                Assignees\n                            "
+                            _c(
+                              "jet-nav-link",
+                              {
+                                attrs: {
+                                  href: _vm.route("assignees"),
+                                  active: _vm.route().current("assignees*"),
+                                },
+                              },
+                              [
+                                _vm._v(
+                                  "\n                                Assignees\n                            "
+                                ),
+                              ]
                             ),
-                          ]
-                        ),
-                      ],
-                      1
-                    ),
+                          ],
+                          1
+                        )
+                      : _vm._e(),
                   ]),
                   _vm._v(" "),
                   _c(
@@ -40646,7 +40688,11 @@ var render = function () {
             { staticClass: "bg-white overflow-hidden shadow-xl sm:rounded-lg" },
             [
               _c("create-event", {
-                attrs: { assignees: _vm.assignees, errors: _vm.errors },
+                attrs: {
+                  assignees: _vm.assignees,
+                  userLevel: _vm.userLevel,
+                  errors: _vm.errors,
+                },
               }),
             ],
             1
@@ -40714,6 +40760,7 @@ var render = function () {
                   event: _vm.event,
                   allAssignees: _vm.allAssignees,
                   selectedAssignees: _vm.selectedAssignees,
+                  userLevel: _vm.userLevel,
                   errors: _vm.errors,
                 },
               }),

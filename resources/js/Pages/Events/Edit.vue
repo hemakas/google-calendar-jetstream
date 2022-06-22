@@ -13,6 +13,7 @@
                     :event="event" 
                     :allAssignees="allAssignees" 
                     :selectedAssignees="selectedAssignees"
+                    :userLevel="userLevel" 
                     :errors="errors" 
                     />
                 </div>
@@ -35,6 +36,7 @@
             event: {},
             allAssignees: {},
             selectedAssignees: {},
+            userLevel: {},
             errors: {}
         }
     }

@@ -11,6 +11,7 @@
                 <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
                     <create-event 
                     :assignees="assignees" 
+                    :userLevel="userLevel" 
                     :errors="errors" 
                     />
                 </div>
@@ -31,6 +32,7 @@
 
         props: {
             assignees: {},
+            userLevel: {},
             errors: {}
         }
     }

@@ -24,10 +24,18 @@ class LocalEventController extends Controller
     // show all events
     public function index()
     {
-        $localEvents = LocalEvent::OrderBy('created_at', 'DESC')->get();
+        
+        if (Auth::user()->level > 1) {
+            $localEvents = LocalEvent::where('created_by', Auth::user()->id)->OrderBy('created_at', 'DESC')->get();
+        } else {
+            $localEvents = LocalEvent::OrderBy('created_at', 'DESC')->get();
+        }
+
+        $userLevel = Auth::user()->level;
 
         return Inertia::render('Events/Index', [
-            'events' => $localEvents
+            'events' => $localEvents,
+            'userLevel' => $userLevel
         ]);
     }
 
@@ -35,9 +43,11 @@ class LocalEventController extends Controller
     public function create()
     {
         $assignees = User::where('level', 3)->orderBy('name', 'ASC')->get();
+        $userLevel = Auth::user()->level;
 
         return Inertia::render('Events/Create', [
-            'assignees' => $assignees
+            'assignees' => $assignees,
+            'userLevel' => $userLevel
         ]);
     }
 
@@ -71,7 +81,8 @@ class LocalEventController extends Controller
             'title' => $request->title,
             'description' => $request->description,
             'start' => $start,
-            'end' => $end
+            'end' => $end,
+            'created_by' => Auth::user()->id
         ]);
 
         $localEventId = $localEvent->id;
@@ -94,7 +105,7 @@ class LocalEventController extends Controller
             if (Auth::user()->level == 3) {
                 $localEvent = LocalEvent::find($localEventId);
                 $localEvent->users()->attach(Auth::user()->id, [
-                    'creator' => Athu::user()->id
+                    'creator' => Auth::user()->id
                 ]);
             }
         }
@@ -110,9 +121,11 @@ class LocalEventController extends Controller
     // render edit page
     public function edit($id)
     {
+
         $localEvent = LocalEvent::find($id);  
         $allAssignees = User::where('level', 3)->orderBy('name', 'ASC')->get();
         $selectedAssignees = [];
+        $userLevel = Auth::user()->level;
 
         foreach ($localEvent->users as $user) {
             $selectedAssignees[] = $user;
@@ -121,7 +134,8 @@ class LocalEventController extends Controller
         return Inertia::render('Events/Edit', [
             'event' => $localEvent,
             'allAssignees' => $allAssignees,
-            'selectedAssignees' => $selectedAssignees
+            'selectedAssignees' => $selectedAssignees,
+            'userLevel' => $userLevel
         ]);
     }
 
@@ -145,6 +159,7 @@ class LocalEventController extends Controller
         $localEvent->description = $request->description;
         $localEvent->start = $start;
         $localEvent->end = $end;
+        $localEvent->created_by = Auth::user()->id;
         $localEvent->update();
 
         // update google event

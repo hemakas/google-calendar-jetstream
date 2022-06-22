@@ -46,4 +46,9 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(LocalEvent::class)->withTimestamps();
     }
+
+    public function creator()
+    {
+        return $this->hasMany(LocalEvent::class);
+    }
 }

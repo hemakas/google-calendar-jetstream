@@ -46,6 +46,7 @@
             </template>
             <v-date-picker v-model="form.endDate" @input="endDateMenu = false"></v-date-picker>
           </v-menu>
+          <p v-if="errors.endDate" class="text-red-500 text-xs mt-3">{{ errors.endDate }}</p>
         </v-col>
         
         <v-col cols="12" md="3">
@@ -68,7 +69,7 @@
         </v-col>
       </v-row>
       
-      <v-row>
+      <v-row v-if="userLevel < 3">
         <v-col cols="12" md="12" class="mb-4">
           <!-- assignee -->
           <v-select v-model="form.selectedAssignees" :items="items" :menu-props="{ maxHeight: '400' }" label="Assignee" multiple hint="Select whom to assign" persistent-hint></v-select>
@@ -121,7 +122,9 @@ export default {
   },
 
   props: {
-    assignees: {}
+    assignees: {},
+    userLevel: {},
+    errors: {}
   },
 
   methods: {
