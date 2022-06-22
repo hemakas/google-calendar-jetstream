@@ -10,16 +10,16 @@ use App\Http\Controllers\AssigneeController;
 use App\Http\Controllers\CustomLoginController;
 
 // / page 
-// Route::redirect('/', '/login');
+Route::redirect('/', '/login');
 
-Route::get('/', function () {
-    return Inertia::render('Welcome', [
-        'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
-    ]);
-});
+// Route::get('/', function () {
+//     return Inertia::render('Welcome', [
+//         'canLogin' => Route::has('login'),
+//         'canRegister' => Route::has('register'),
+//         'laravelVersion' => Application::VERSION,
+//         'phpVersion' => PHP_VERSION,
+//     ]);
+// });
 
 Route::middleware(['auth:sanctum', 'verified'])->get('/events', function () {
     return Inertia::render('Events/Index');
