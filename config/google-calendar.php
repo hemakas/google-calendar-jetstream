@@ -13,7 +13,8 @@ return [
             /*
              * Path to the json file containing the credentials.
              */
-            'credentials_json' => storage_path('app/google-calendar/service-account-credentials.json'),
+            // 'credentials_json' => storage_path('app/google-calendar/service-account-credentials.json'),
+            'credentials_json' => storage_path('app/google-calendar/service-account-credentials-herokku.json'),
         ],
 
         /*
