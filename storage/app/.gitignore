@@ -1,3 +1,4 @@
 *
 !public/
+!google-calendar/service-account-credentials-heroku.json
 !.gitignore
