@@ -10,11 +10,15 @@ return [
          * Authenticate using a service account.
          */
         'service_account' => [
-            /*
-             * Path to the json file containing the credentials.
-             */
-            // 'credentials_json' => storage_path('app/google-calendar/service-account-credentials.json'),
-            'credentials_json' => storage_path('app/google-calendar/service-account-credentials-heroku.json'),
+            
+            // for local 
+             // 'credentials_json' => storage_path('app/google-calendar/service-account-credentials.json'),
+            // 'credentials_json' => storage_path('app/google-calendar/service-account-credentials-heroku.json'),
+            
+            
+            // for heroku
+            // 'credentials_json' => storage_path('google-calendar/service-account-credentials.json'),
+            'credentials_json' => storage_path('google-calendar/service-account-credentials-heroku.json'),
         ],
 
         /*
